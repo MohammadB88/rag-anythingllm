@@ -1,0 +1,452 @@
+{
+  "total_count": 9,
+  "limit": 100,
+  "first": {
+    "href": "https://us-south.ml.cloud.ibm.com/ml/v1/foundation_model_specs?version=2024-07-25&filters=function_embedding"
+  },
+  "resources": [
+    {
+      "model_id": "ibm/granite-embedding-107m-multilingual",
+      "label": "granite-embedding-107m-multilingual",
+      "provider": "IBM",
+      "source": "IBM",
+      "functions": [
+        {
+          "id": "embedding"
+        }
+      ],
+      "short_description": "Granite-Embedding-107M-Multilingual is a 107M parameter model from the Granite Embeddings suite that can be used to generate high quality text embeddings.",
+      "long_description": "Granite-Embedding-107M-Multilingual is a 107M parameter model from the Granite Embeddings suite that can be used to generate high quality text embeddings. This model produces embedding vectors of size 384 and is trained using a combination of open source relevance-pair datasets with permissive, enterprise-friendly license, and IBM collected and generated datasets. It supports 12 languages:  English, German, Spanish, French, Japanese, Portuguese, Arabic, Czech, Italian, Korean, Dutch, and Chinese.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "107m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      },
+      "lifecycle": [
+        {
+          "id": "available",
+          "start_date": "2025-01-06"
+        }
+      ]
+    },
+    {
+      "model_id": "ibm/granite-embedding-278m-multilingual",
+      "label": "granite-embedding-278m-multilingual",
+      "provider": "IBM",
+      "source": "IBM",
+      "functions": [
+        {
+          "id": "autoai_rag"
+        },
+        {
+          "id": "embedding"
+        }
+      ],
+      "short_description": "Granite-Embedding-278M-Multilingual is a 278M parameter model from the Granite Embeddings suite that can be used to generate high quality text embeddings.",
+      "long_description": "Granite-Embedding-278M-Multilingual is a 278M parameter model from the Granite Embeddings suite that can be used to generate high quality text embeddings. This model produces embedding vectors of size 768 and is trained using a combination of open source relevance-pair datasets with permissive, enterprise-friendly license, and IBM collected and generated datasets. It supports 12 languages:  English, German, Spanish, French, Japanese, Portuguese, Arabic, Czech, Italian, Korean, Dutch, and Chinese.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "278m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      },
+      "lifecycle": [
+        {
+          "id": "available",
+          "start_date": "2025-01-15"
+        }
+      ]
+    },
+    {
+      "model_id": "ibm/slate-125m-english-rtrvr",
+      "label": "slate-125m-english-rtrvr",
+      "provider": "IBM",
+      "source": "IBM",
+      "functions": [
+        {
+          "id": "autoai_rag"
+        },
+        {
+          "id": "embedding"
+        },
+        {
+          "id": "rerank"
+        },
+        {
+          "id": "similarity"
+        }
+      ],
+      "short_description": "An embedding model. It has 125 million parameters and an embedding dimension of 768.",
+      "long_description": "This model follows the standard 'sentence transformers' approach, relying on bi-encoders. It generates embeddings for various inputs such as queries, passages, or documents. The training objective is to maximize cosine similarity between two text pieces: text A (query text) and text B (passage text). This process yields sentence embeddings q and p, allowing for comparison through cosine similarity.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "125m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      },
+      "lifecycle": [
+        {
+          "id": "available",
+          "start_date": "2024-04-18"
+        }
+      ]
+    },
+    {
+      "model_id": "ibm/slate-125m-english-rtrvr-v2",
+      "label": "slate-125m-english-rtrvr-v2",
+      "provider": "IBM",
+      "source": "IBM",
+      "functions": [
+        {
+          "id": "autoai_rag"
+        },
+        {
+          "id": "embedding"
+        },
+        {
+          "id": "rerank"
+        },
+        {
+          "id": "similarity"
+        }
+      ],
+      "short_description": "An embedding model with 512 token limit. It has 125 million parameters and an embedding dimension of 768.",
+      "long_description": "This model follows the standard 'sentence transformers' approach, relying on bi-encoders. It generates embeddings for various inputs such as queries, passages, or documents. The training objective is to maximize cosine similarity between two text pieces: text A (query text) and text B (passage text). This process yields sentence embeddings q and p, allowing for comparison through cosine similarity.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "125m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      }
+    },
+    {
+      "model_id": "ibm/slate-30m-english-rtrvr",
+      "label": "slate-30m-english-rtrvr",
+      "provider": "IBM",
+      "source": "IBM",
+      "functions": [
+        {
+          "id": "embedding"
+        },
+        {
+          "id": "rerank"
+        },
+        {
+          "id": "similarity"
+        }
+      ],
+      "short_description": "An embedding model. It has 30 million parameters and an embedding dimension of 384.",
+      "long_description": "This model follows the standard 'sentence transformers' approach, relying on bi-encoders. It generates embeddings for various inputs such as queries, passages, or documents. The training objective is to maximize cosine similarity between two text pieces: text A (query text) and text B (passage text). This process yields sentence embeddings q and p, allowing for comparison through cosine similarity.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "30m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      },
+      "lifecycle": [
+        {
+          "id": "available",
+          "start_date": "2024-04-18"
+        }
+      ]
+    },
+    {
+      "model_id": "ibm/slate-30m-english-rtrvr-v2",
+      "label": "slate-30m-english-rtrvr-v2",
+      "provider": "IBM",
+      "source": "IBM",
+      "functions": [
+        {
+          "id": "embedding"
+        },
+        {
+          "id": "rerank"
+        },
+        {
+          "id": "similarity"
+        }
+      ],
+      "short_description": "An embedding model with 512 token limit. It has 30 million parameters and an embedding dimension of 384.",
+      "long_description": "This model follows the standard 'sentence transformers' approach, relying on bi-encoders. It generates embeddings for various inputs such as queries, passages, or documents. The training objective is to maximize cosine similarity between two text pieces: text A (query text) and text B (passage text). This process yields sentence embeddings q and p, allowing for comparison through cosine similarity.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "30m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      },
+      "lifecycle": [
+        {
+          "id": "available",
+          "start_date": "2024-08-15"
+        }
+      ]
+    },
+    {
+      "model_id": "intfloat/multilingual-e5-large",
+      "label": "multilingual-e5-large",
+      "provider": "intfloat",
+      "source": "intfloat",
+      "functions": [
+        {
+          "id": "autoai_rag"
+        },
+        {
+          "id": "embedding"
+        },
+        {
+          "id": "multilingual"
+        },
+        {
+          "id": "rerank"
+        },
+        {
+          "id": "similarity"
+        }
+      ],
+      "short_description": "An embedding model. It has 560 million parameters, has 24 layers and the embedding size is 1024.",
+      "long_description": "This model gets continually trained on a mixture of multilingual datasets. It supports 100 languages from xlm-roberta.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "560m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      },
+      "lifecycle": [
+        {
+          "id": "available",
+          "start_date": "2024-05-16"
+        }
+      ],
+      "supported_languages": [
+        "af",
+        "am",
+        "ar",
+        "as",
+        "az",
+        "be",
+        "bg",
+        "bn",
+        "br",
+        "bs",
+        "ca",
+        "cs",
+        "cy",
+        "da",
+        "de",
+        "el",
+        "en",
+        "eo",
+        "es",
+        "et",
+        "eu",
+        "fa",
+        "fi",
+        "fr",
+        "fy",
+        "ga",
+        "gd",
+        "gl",
+        "gu",
+        "ha",
+        "he",
+        "hi",
+        "hr",
+        "hu",
+        "hy",
+        "id",
+        "is",
+        "it",
+        "ja",
+        "jv",
+        "ka",
+        "kk",
+        "km",
+        "kn",
+        "ko",
+        "ku",
+        "ky",
+        "la",
+        "lo",
+        "lt",
+        "lv",
+        "mg",
+        "mk",
+        "ml",
+        "mn",
+        "mr",
+        "ms",
+        "my",
+        "ne",
+        "nl",
+        "no",
+        "om",
+        "or",
+        "pa",
+        "pl",
+        "ps",
+        "pt",
+        "ro",
+        "ru",
+        "sa",
+        "sd",
+        "si",
+        "sk",
+        "sl",
+        "so",
+        "sq",
+        "sr",
+        "su",
+        "sv",
+        "sw",
+        "ta",
+        "te",
+        "th",
+        "tl",
+        "tr",
+        "ug",
+        "uk",
+        "ur",
+        "uz",
+        "vi",
+        "xh",
+        "yi",
+        "zh"
+      ]
+    },
+    {
+      "model_id": "sentence-transformers/all-minilm-l12-v2",
+      "label": "all-minilm-l12-v2",
+      "provider": "sentence-transformers",
+      "source": "sentence-transformers",
+      "functions": [
+        {
+          "id": "embedding"
+        },
+        {
+          "id": "rerank"
+        },
+        {
+          "id": "similarity"
+        }
+      ],
+      "short_description": "An embedding model with 128 token limit. It has 33.4 million parameters and an embedding dimension of 384.",
+      "long_description": "This model follows sentence transformers approach, it maps sentences & paragraphs to a 384 dimensional dense vector space and can be used for tasks like clustering or semantic search.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "33.4m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      },
+      "lifecycle": [
+        {
+          "id": "available",
+          "start_date": "2024-05-16"
+        }
+      ]
+    },
+    {
+      "model_id": "sentence-transformers/all-minilm-l6-v2",
+      "label": "all-minilm6-v2",
+      "provider": "sentence-transformers",
+      "source": "sentence-transformers",
+      "functions": [
+        {
+          "id": "embedding"
+        },
+        {
+          "id": "rerank"
+        },
+        {
+          "id": "similarity"
+        }
+      ],
+      "short_description": "An embedding model with 128 token limit. It has 23 million parameters and an embedding dimension of 384.",
+      "long_description": "This is a sentence-transformers model. It maps sentences & paragraphs to a 384 dimensional dense vector space and can be used for tasks like clustering or semantic search.",
+      "input_tier": "class_c1",
+      "output_tier": "class_c1",
+      "number_params": "23m",
+      "limits": {
+        "lite": {
+          "call_time": "5m0s"
+        },
+        "v2-professional": {
+          "call_time": "10m0s"
+        },
+        "v2-standard": {
+          "call_time": "10m0s"
+        }
+      },
+      "lifecycle": [
+        {
+          "id": "available",
+          "start_date": "2024-10-16"
+        }
+      ]
+    }
+  ]
+}
