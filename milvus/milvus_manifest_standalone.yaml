@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: "vectordb-minio"
-  namespace: "kserve-test"
+  namespace: "milvus"
   labels:
     app: minio
     chart: minio-8.0.17
@@ -33,7 +33,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: "vectordb-pulsarv3-recovery"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -66,7 +66,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: "vectordb-pulsarv3-bookie"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -99,7 +99,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: "vectordb-pulsarv3-broker-acct"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -132,7 +132,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: "vectordb-pulsarv3-proxy"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -165,7 +165,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: "vectordb-pulsarv3-zookeeper"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -318,7 +318,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "vectordb-pulsarv3-recovery"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -364,7 +364,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "vectordb-pulsarv3-bookie"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -431,7 +431,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "vectordb-pulsarv3-broker"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -500,7 +500,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "vectordb-pulsarv3-proxy"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -549,7 +549,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "vectordb-pulsarv3-zookeeper"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -572,7 +572,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: vectordb-milvus
-  namespace: kserve-test
+  namespace: milvus
 data:
   default.yaml: |+
     # Copyright (C) 2019-2021 Zilliz. All rights reserved.
@@ -588,7 +588,7 @@ data:
     
     etcd:
       endpoints:
-      - vectordb-etcd-0.vectordb-etcd-headless.kserve-test.svc.cluster.local:2379
+      - vectordb-etcd-0.vectordb-etcd-headless.milvus.svc.cluster.local:2379
     
     metastore:
       type: etcd
@@ -703,7 +703,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: vectordb-milvus
-  namespace: kserve-test
+  namespace: milvus
   annotations:
     helm.sh/resource-policy: keep
   labels:
@@ -788,14 +788,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: "vectordb-pulsarv3-broker-acct"
-  namespace: kserve-test
+  namespace: milvus
 ---
 # Source: milvus/charts/etcd/templates/svc-headless.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: vectordb-etcd-headless
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app.kubernetes.io/name: etcd
     helm.sh/chart: etcd-6.3.3
@@ -823,7 +823,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: vectordb-etcd
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app.kubernetes.io/name: etcd
     helm.sh/chart: etcd-6.3.3
@@ -889,7 +889,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "vectordb-pulsarv3-recovery"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -930,7 +930,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "vectordb-pulsarv3-bookie"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -974,7 +974,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "vectordb-pulsarv3-broker"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -1020,7 +1020,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "vectordb-pulsarv3-proxy"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -1070,7 +1070,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "vectordb-pulsarv3-zookeeper"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -1103,7 +1103,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: vectordb-milvus
-  namespace: kserve-test
+  namespace: milvus
   labels:
     helm.sh/chart: milvus-4.2.44
     app.kubernetes.io/name: milvus
@@ -1158,14 +1158,18 @@ spec:
         checksum/config: 74ba8d8540b0f5f09a6a722f9f7e388e3f8b60121c9ce0ccb145888e1c4c2781
     spec:
       serviceAccountName: "vectordb-minio"
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+      securityContext: {}
       containers:
         - name: minio
           image: "minio/minio:RELEASE.2023-03-20T20-16-18Z"
           imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: "RuntimeDefault"
+            capabilities:
+              drop: ["ALL"]
           command:
             - "/bin/sh"
             - "-ce"
@@ -1229,7 +1233,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vectordb-milvus-standalone
-  namespace: kserve-test
+  namespace: milvus
   labels:
     helm.sh/chart: milvus-4.2.44
     app.kubernetes.io/name: milvus
@@ -1258,7 +1262,7 @@ spec:
         component: "standalone"
         
       annotations:
-        checksum/config: e07d76d56eb45a463fdf6898aa686512578d77fda073cf81020d39d89a279dc1
+        checksum/config: a79b400b518973ed55f5b43ac22e72497aa010726385c79d6b0bce47a227b5d0
         
     spec:
       serviceAccountName: default
@@ -1329,7 +1333,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: vectordb-etcd
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app.kubernetes.io/name: etcd
     helm.sh/chart: etcd-6.3.3
@@ -1354,10 +1358,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
       annotations:
     spec:
-      
       affinity:
         podAffinity:
-          
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
@@ -1366,13 +1368,11 @@ spec:
                     app.kubernetes.io/name: etcd
                     app.kubernetes.io/instance: vectordb
                 namespaces:
-                  - "kserve-test"
+                  - "milvus"
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
-          
-      securityContext:
-        fsGroup: 1001
+      securityContext: {}
       serviceAccountName: "default"
       containers:
         - name: etcd
@@ -1380,7 +1380,9 @@ spec:
           imagePullPolicy: "IfNotPresent"
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1001
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           env:
             - name: BITNAMI_DEBUG
               value: "false"
@@ -1409,11 +1411,11 @@ spec:
             - name: ALLOW_NONE_AUTHENTICATION
               value: "yes"
             - name: ETCD_ADVERTISE_CLIENT_URLS
-              value: "http://$(MY_POD_NAME).vectordb-etcd-headless.kserve-test.svc.cluster.local:2379"
+              value: "http://$(MY_POD_NAME).vectordb-etcd-headless.milvus.svc.cluster.local:2379"
             - name: ETCD_LISTEN_CLIENT_URLS
               value: "http://0.0.0.0:2379"
             - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
-              value: "http://$(MY_POD_NAME).vectordb-etcd-headless.kserve-test.svc.cluster.local:2380"
+              value: "http://$(MY_POD_NAME).vectordb-etcd-headless.milvus.svc.cluster.local:2380"
             - name: ETCD_LISTEN_PEER_URLS
               value: "http://0.0.0.0:2380"
             - name: ETCD_AUTO_COMPACTION_MODE
@@ -1492,7 +1494,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: "vectordb-pulsarv3-recovery"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -1594,7 +1596,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: "vectordb-pulsarv3-bookie"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -1627,9 +1629,7 @@ spec:
       affinity:
       terminationGracePeriodSeconds: 30
       serviceAccountName: "vectordb-pulsarv3-bookie"
-      securityContext:
-        fsGroup: 0
-        fsGroupChangePolicy: OnRootMismatch
+      securityContext: {}
       initContainers:
       # This initContainer will wait for bookkeeper initnewcluster to complete
       # before deploying the bookies
@@ -1658,6 +1658,11 @@ spec:
       - name: "vectordb-pulsarv3-bookie"
         image: "apachepulsar/pulsar:3.0.7"
         imagePullPolicy: IfNotPresent
+        securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
         livenessProbe:
           httpGet:
             path: /api/v1/bookie/state
@@ -1740,7 +1745,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: "vectordb-pulsarv3-broker"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -1856,11 +1861,11 @@ spec:
           bin/gen-yml-from-env.py conf/functions_worker.yml;
           echo "OK" > status;
           
-          bin/pulsar zookeeper-shell -server vectordb-pulsarv3-zookeeper:2181 get /loadbalance/brokers/${HOSTNAME}.vectordb-pulsarv3-broker.kserve-test.svc.cluster.local:8080;
+          bin/pulsar zookeeper-shell -server vectordb-pulsarv3-zookeeper:2181 get /loadbalance/brokers/${HOSTNAME}.vectordb-pulsarv3-broker.milvus.svc.cluster.local:8080;
           while [ $? -eq 0 ]; do
-            echo "broker ${HOSTNAME}.vectordb-pulsarv3-broker.kserve-test.svc.cluster.local znode still exists ... check in 10 seconds ...";
+            echo "broker ${HOSTNAME}.vectordb-pulsarv3-broker.milvus.svc.cluster.local znode still exists ... check in 10 seconds ...";
             sleep 10;
-            bin/pulsar zookeeper-shell -server vectordb-pulsarv3-zookeeper:2181 get /loadbalance/brokers/${HOSTNAME}.vectordb-pulsarv3-broker.kserve-test.svc.cluster.local:8080;
+            bin/pulsar zookeeper-shell -server vectordb-pulsarv3-zookeeper:2181 get /loadbalance/brokers/${HOSTNAME}.vectordb-pulsarv3-broker.milvus.svc.cluster.local:8080;
           done;
           cat conf/pulsar_env.sh;
           OPTS="${OPTS} -Dlog4j2.formatMsgNoLookups=true" exec bin/pulsar broker;
@@ -1901,7 +1906,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: "vectordb-pulsarv3-proxy"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -2035,7 +2040,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: "vectordb-pulsarv3-zookeeper"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -2066,13 +2071,16 @@ spec:
       affinity:
       terminationGracePeriodSeconds: 30
       serviceAccountName: "vectordb-pulsarv3-zookeeper"
-      securityContext:
-        fsGroup: 0
-        fsGroupChangePolicy: OnRootMismatch
+      securityContext: {}
       containers:
       - name: "vectordb-pulsarv3-zookeeper"
         image: "apachepulsar/pulsar:3.0.7"
         imagePullPolicy: IfNotPresent
+        securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
         resources:
           requests:
             cpu: 0.2
@@ -2163,7 +2171,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: "vectordb-pulsarv3-bookie-init"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -2191,7 +2199,7 @@ spec:
         command: ["sh", "-c"]
         args:
           - >-
-            until nslookup vectordb-pulsarv3-zookeeper-2.vectordb-pulsarv3-zookeeper.kserve-test; do
+            until nslookup vectordb-pulsarv3-zookeeper-2.vectordb-pulsarv3-zookeeper.milvus; do
               sleep 3;
             done;
       containers:
@@ -2241,7 +2249,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: "vectordb-pulsarv3-pulsar-init"
-  namespace: kserve-test
+  namespace: milvus
   labels:
     app: pulsarv3
     chart: pulsarv3-3.3.0
@@ -2266,7 +2274,7 @@ spec:
         command: ["sh", "-c"]
         args:
           - >-
-            until nslookup vectordb-pulsarv3-zookeeper-2.vectordb-pulsarv3-zookeeper.kserve-test; do
+            until nslookup vectordb-pulsarv3-zookeeper-2.vectordb-pulsarv3-zookeeper.milvus; do
               sleep 3;
             done;
       # This initContainer will wait for bookkeeper initnewcluster to complete
@@ -2307,10 +2315,10 @@ spec:
               --cluster vectordb-pulsarv3 \
               --zookeeper vectordb-pulsarv3-zookeeper:2181 \
               --configuration-store vectordb-pulsarv3-zookeeper:2181 \
-              --web-service-url http://vectordb-pulsarv3-broker.kserve-test.svc.cluster.local:8080/ \
-              --web-service-url-tls https://vectordb-pulsarv3-broker.kserve-test.svc.cluster.local:8443/ \
-              --broker-service-url pulsar://vectordb-pulsarv3-broker.kserve-test.svc.cluster.local:6650/ \
-              --broker-service-url-tls pulsar+ssl://vectordb-pulsarv3-broker.kserve-test.svc.cluster.local:6651/ ;
+              --web-service-url http://vectordb-pulsarv3-broker.milvus.svc.cluster.local:8080/ \
+              --web-service-url-tls https://vectordb-pulsarv3-broker.milvus.svc.cluster.local:8443/ \
+              --broker-service-url pulsar://vectordb-pulsarv3-broker.milvus.svc.cluster.local:6650/ \
+              --broker-service-url-tls pulsar+ssl://vectordb-pulsarv3-broker.milvus.svc.cluster.local:6651/ ;
         volumeMounts:
         
       volumes:
