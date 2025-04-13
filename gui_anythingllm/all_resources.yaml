@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ai-assistant-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 30Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-assistant
+  labels:
+    app: ai-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-assistant
+  template:
+    metadata:
+      labels:
+        app: ai-assistant
+    spec:
+      volumes:
+        - name: ai-assistant-pvc
+          persistentVolumeClaim:
+            claimName: ai-assistant-pvc
+      containers:
+        - name: ai-assistant
+          image: quay.io/rh-aiservices-bu/anythingllm-workbench:1.7.4
+          ports:
+          - containerPort: 8888
+          volumeMounts:
+          - mountPath: /opt/app-root/src
+            name: ai-assistant-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-assistant-svc
+spec:
+  ports:
+  - protocol: TCP
+    port: 8888
+    targetPort: 8888
+  selector:
+    app: ai-assistant
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: ai-assistant
+  labels: {}
+spec:
+  to:
+    kind: Service
+    name: ai-assistant-svc
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+    destinationCACertificate: ''
+  port:
+    targetPort: 8888
+  alternateBackends: []

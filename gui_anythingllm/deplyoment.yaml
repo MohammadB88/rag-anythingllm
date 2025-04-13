@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-assistant
+  labels:
+    app: ai-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-assistant
+  template:
+    metadata:
+      labels:
+        app: ai-assistant
+    spec:
+      volumes:
+        - name: ai-assistant-pvc
+          persistentVolumeClaim:
+            claimName: ai-assistant-pvc
+      containers:
+        - name: ai-assistant
+          image: quay.io/rh-aiservices-bu/anythingllm-workbench:1.7.4
+          ports:
+          - containerPort: 8888
+          volumeMounts:
+          - mountPath: /opt/app-root/src
+            name: ai-assistant-pvc
