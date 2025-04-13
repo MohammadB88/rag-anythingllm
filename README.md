@@ -35,8 +35,9 @@ Before deploying the solution, ensure you have the following:
 
     - We will install Milvus based on the insttuction from this link [Milvus on OpenShift](https://github.com/rh-aiservices-bu/llm-on-openshift/tree/main/vector-databases/milvus). Accordingly, I have generated the manifest for a standalone deployment.
    - Navigate to the `milvus/` directory.
-   - On the cluster, create a namespace called "**milvus**"
-   - Since we are deploying a standalone instance, we use this command to create the manifest with release name of "**vectordb**":
+   - On the cluster, create a namespace called "**milvus**".
+   - We call the release name to be "**vectordb**".
+   - This command is used to create the manifest for a standalone deployment:
      ```sh
      helm template -f openshift-values.yaml vectordb -n milvus --set cluster.enabled=false --set etcd.replicaCount=1 --set minio.mode=standalone --set pulsar.enabled=false milvus/milvus > milvus_manifest_standalone.yaml
      ```
@@ -51,21 +52,37 @@ Before deploying the solution, ensure you have the following:
         yq '(select(.kind == "StatefulSet" and .metadata.name == "vectordb-pulsarv3-bookie") | .spec.template.spec.securityContext) = {}' -i milvus_manifest_standalone.yaml
         yq '(select(.kind == "StatefulSet" and .metadata.name == "vectordb-pulsarv3-bookie") | .spec.template.spec.containers[0].securityContext) = {"capabilities": {"drop": ["ALL"]}, "runAsNonRoot": true, "allowPrivilegeEscalation": false}' -i milvus_manifest_standalone.yaml
      ```
-   - Apply the standalone manifest:
+   - Deploy the standalone instance using the manifest:
      ```sh
      kubectl apply -f milvus_manifest_standalone.yaml
      ```
-   - To deploy the management UI for Milvus, called Attu, apply the file attu-deployment.yaml 
-
-2. **Deploy the GenAI GUI**:
-   - Navigate to the `gui_anythingllm/` directory.
-   - Apply the manifests in the following order:
+   - It is possible to deploy an user interface (UI) for the Milvus Vector database. It is called attu and can be deployed using the below [manifest](https://github.com/rh-aiservices-bu/llm-on-openshift/blob/main/vector-databases/milvus/attu-deployment.yaml):
      ```sh
-     kubectl apply -f all_resources.yaml
+     kubectl apply -f attu-deployment.yaml
      ```
 
-3. **Deploy the Ollama Model Service**:
+2. **Deploy the Ollama Model Service**:
+   - We create a namesapce called **Ollama** on the cluster.
    - Navigate to the `model_ollama/` directory.
+   - In the manifests called "**all_resources.yaml**", there is a **PVC**, a **Deployment**, and a **Service** to deploy:
+     ```sh
+     kubectl apply -f all_resources.yaml
+     ``` 
+   - Now, from OpenShift Console go to the running pod and open the Terminal tab, as show in the below image:
+   - At the moment, there are no available models listed for ollama. Hence, we pull two models for this example:
+       - A chat LLM model:
+        ```sh
+        ollama pull llama3.2:3b
+        ``` 
+       - A model for embedding to populate the vector database:
+        ```sh
+        ollama pull all-minilm:33m
+        ``` 
+
+3. **Deploy the GenAI GUI**:
+   - GenAI GUI will be deployed in its namesapce, as well. 
+   - When creating a route for this microservice, this name will appear in the URL. Therefore, we choose the meaningfull name as "**rag-genai**".
+   - Navigate to the `gui_anythingllm/` directory.
    - Apply the manifests in the following order:
      ```sh
      kubectl apply -f all_resources.yaml

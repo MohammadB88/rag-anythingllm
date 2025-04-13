@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  labels:
+    app: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      volumes:
+        - name: ollama-pvc
+          persistentVolumeClaim:
+            claimName: ollama-pvc
+      containers:
+        - name: ollama
+          image: quay.io/rh-aiservices-bu/ollama-ubi9:0.3.13
+          ports:
+          - containerPort: 11434
+          volumeMounts:
+          - mountPath: /.ollama
+            name: ollama-pvc
