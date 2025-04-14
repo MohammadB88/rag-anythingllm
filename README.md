@@ -1,4 +1,4 @@
-# rag-anythingllm
+# RAG - AnythingLLM
 
 This repository contains the manifests and resources required to deploy a Generative AI (GenAI) GUI with a Retrieval-Augmented Generation (RAG) architecture. The project is designed to simplify the deployment of a scalable and efficient GenAI solution.
 
@@ -60,6 +60,7 @@ Before deploying the solution, ensure you have the following:
      ```sh
      kubectl apply -f attu-deployment.yaml
      ```
+   - Make sure all the resources are successfully created and that the pods are running without errors.
 
 2. **Deploy the Ollama Model Service**:
    - We create a namesapce called **Ollama** on the cluster.
@@ -68,7 +69,9 @@ Before deploying the solution, ensure you have the following:
      ```sh
      kubectl apply -f all_resources.yaml
      ``` 
-   - Now, from OpenShift Console go to the running pod and open the Terminal tab, as show in the below image:
+   - Make sure all the resources are successfully created and that the pod is running without errors.
+   - Now, from OpenShift Console go to the running pod and open the Terminal tab, as shown in the below image:
+     ![ollama - pod terminal](images/pod_terminal.png)
    - At the moment, there are no available models listed for ollama. Hence, we pull two models for this example:
        - A chat LLM model:
         ```sh
@@ -78,6 +81,8 @@ Before deploying the solution, ensure you have the following:
         ```sh
         ollama pull all-minilm:33m
         ``` 
+   - The models are loaded to be consumed:
+     ![ollama - loaded models](images/ollama_model_list.png)
 
 3. **Deploy the GenAI GUI**:
    - GenAI GUI will be deployed in its namesapce, as well. 
@@ -87,27 +92,35 @@ Before deploying the solution, ensure you have the following:
      ```sh
      kubectl apply -f all_resources.yaml
      ```
-   - After pods are running, we can open the URL and start configuring the interface.
+   - Make sure all the resources are successfully created.
+   - Once the pods are running, the URL can be accessed to begin configuring the interface.
      ![RAG GUI - first page](images/gui_first_page.png)
-   
-4. **Verify the Deployment**:
-   - Check the status of the pods:
-     ```sh
-     kubectl get pods
-     ```
-   - Ensure all pods are running without errors.
 
-5. **Configure the GenAI GUI**:
+4. **Configure the GenAI GUI**:
    - First, we choose ollama as the model runtime and set the base URL and correct chat model. Here, the base URL is built as below:
      ```sh
      BASE_URL = http://OLLAMA_SERVICE:SERVICE_PORT
      ```
-     ![alt text](images/gui_llm_interface.png)
-   - User Setup
+     ![RAG GUI - llm interface](images/gui_llm_interface.png)
+   
+   - Set up an admin user and its password:
+     ![RAG GUI - user setup](images/gui_user_setup.png)
+   
    - Set a workspace name
-   - Go to settings and change the logo and the favicon
+     ![RAG GUI - workspace](images/gui_workspace_name.png)
+   
+   - From the bottom-left corner of the landing page, navigate to the settings menu.
+   - In the customization tab, we set a new **logo**, a suitable **app name** (i.e. *AI Assistant*), some **customized messages** for the welcome page, **icon and links** to the main website or a github page, an appropriate **tab title** and finally a nice **favicon**:
+     ![RAG GUI - workspace](images/gui_customization.png)
+   
    - Go to the embedding tab and set the URL and model
+     ![RAG GUI - workspace](images/gui_embedding.png)
+  
    - Go to the vector database tab and set the URL
+     ![RAG GUI - workspace](images/gui_vectordb.png)
+      
+   - Set some icons and their links. For example the company's main URL.
+   - Set a proper name for the **AI Assistant**
     
 
 ## Contributing
