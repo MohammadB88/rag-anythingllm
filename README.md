@@ -41,17 +41,31 @@ Before deploying the solution, ensure you have the following:
      ```sh
      helm template -f openshift-values.yaml vectordb -n milvus --set cluster.enabled=false --set etcd.replicaCount=1 --set minio.mode=standalone --set pulsar.enabled=false milvus/milvus > milvus_manifest_standalone.yaml
      ```
-   - SecurityContext in deployment **vectordb-minio** and three statefulsets **vectordb-etcd**, **vectordb-pulsarv3-zookeeper**, **vectordb-pulsarv3-bookie**, should be adjusted to openshift requirements:
-     ```sh
-        yq '(select(.kind == "StatefulSet" and .metadata.name == "vectordb-etcd") | .spec.template.spec.securityContext) = {}' -i milvus_manifest_standalone.yaml
-        yq '(select(.kind == "StatefulSet" and .metadata.name == "vectordb-etcd") | .spec.template.spec.containers[0].securityContext) = {"capabilities": {"drop": ["ALL"]}, "runAsNonRoot": true, "allowPrivilegeEscalation": false}' -i milvus_manifest_standalone.yaml
-        yq '(select(.kind == "Deployment" and .metadata.name == "vectordb-minio") | .spec.template.spec.containers[0].securityContext) = {"capabilities": {"drop": ["ALL"]}, "runAsNonRoot": true, "allowPrivilegeEscalation": false, "seccompProfile": {"type": "RuntimeDefault"} }' -i milvus_manifest_standalone.yaml
-        yq '(select(.kind == "Deployment" and .metadata.name == "vectordb-minio") | .spec.template.spec.securityContext) = {}' -i milvus_manifest_standalone.yaml
-        yq '(select(.kind == "StatefulSet" and .metadata.name == "vectordb-pulsarv3-zookeeper") | .spec.template.spec.securityContext) = {}' -i milvus_manifest_standalone.yaml
-        yq '(select(.kind == "StatefulSet" and .metadata.name == "vectordb-pulsarv3-zookeeper") | .spec.template.spec.containers[0].securityContext) = {"capabilities": {"drop": ["ALL"]}, "runAsNonRoot": true, "allowPrivilegeEscalation": false}' -i milvus_manifest_standalone.yaml
-        yq '(select(.kind == "StatefulSet" and .metadata.name == "vectordb-pulsarv3-bookie") | .spec.template.spec.securityContext) = {}' -i milvus_manifest_standalone.yaml
-        yq '(select(.kind == "StatefulSet" and .metadata.name == "vectordb-pulsarv3-bookie") | .spec.template.spec.containers[0].securityContext) = {"capabilities": {"drop": ["ALL"]}, "runAsNonRoot": true, "allowPrivilegeEscalation": false}' -i milvus_manifest_standalone.yaml
-     ```
+   - SecurityContext in deployment **vectordb-minio** and three statefulsets **vectordb-etcd**, **vectordb-pulsarv3-zookeeper**, and **vectordb-pulsarv3-bookie**, should be adjusted to openshift requirements:
+     - For **vectordb-etcd**, **vectordb-pulsarv3-zookeeper**, and **vectordb-pulsarv3-bookie**:
+         - *.spec.template.spec.securityContext* should be set to empty: **{}**
+         - *.spec.template.spec.containers[0].securityContext* should be set to:
+        ```sh
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+        ```
+    
+     - For **vectordb-minio**:
+         - *.spec.template.spec.securityContext* should be set to empty: **{}**
+         - *.spec.template.spec.containers[0].securityContext* should be set to:
+        ```sh
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile: 
+            type: "RuntimeDefault"
+        ```
+
    - Deploy the standalone instance using the manifest:
      ```sh
      kubectl apply -f milvus_manifest_standalone.yaml
@@ -132,7 +146,7 @@ Before deploying the solution, ensure you have the following:
    - Now you can upload documents and add URLs, which will be then embedded in the workspace, as shown in these images:
 
     <img src="images/gui_upload_doc_url0.png" alt="RAG GUI - vector database" width="100">
-    
+
     <img src="images/gui_upload_doc_url.png" alt="RAG GUI - vector database" width="400">
    
    - The model uses these embedded information to generate a more accurate response with links to the appropriate sources. 
