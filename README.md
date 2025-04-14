@@ -71,7 +71,9 @@ Before deploying the solution, ensure you have the following:
      ``` 
    - Make sure all the resources are successfully created and that the pod is running without errors.
    - Now, from OpenShift Console go to the running pod and open the Terminal tab, as shown in the below image:
-     ![ollama - pod terminal](images/pod_terminal.png)
+     
+     <img src="images/pod_terminal.png" alt="ollama - pod terminal" width="400">
+
    - At the moment, there are no available models listed for ollama. Hence, we pull two models for this example:
        - A chat LLM model:
         ```sh
@@ -82,7 +84,8 @@ Before deploying the solution, ensure you have the following:
         ollama pull all-minilm:33m
         ``` 
    - The models are loaded to be consumed:
-     ![ollama - loaded models](images/ollama_model_list.png)
+     
+     <img src="images/ollama_model_list.png" alt="ollama - loaded models" width="400">
 
 3. **Deploy the GenAI GUI**:
    - GenAI GUI will be deployed in its namesapce, as well. 
@@ -94,34 +97,36 @@ Before deploying the solution, ensure you have the following:
      ```
    - Make sure all the resources are successfully created.
    - Once the pods are running, the URL can be accessed to begin configuring the interface.
-     ![RAG GUI - first page](images/gui_first_page.png)
+     
+     <img src="images/gui_first_page.png" alt="RAG GUI - first page" width="400">
 
 4. **Configure the GenAI GUI**:
    - First, we choose ollama as the model runtime and set the base URL and correct chat model. Here, the base URL is built as below:
      ```sh
      BASE_URL = http://OLLAMA_SERVICE:SERVICE_PORT
      ```
-     ![RAG GUI - llm interface](images/gui_llm_interface.png)
-   
+     <img src="images/gui_llm_interface.png" alt="RAG GUI - llm interface" width="400">
+
    - Set up an admin user and its password:
-     ![RAG GUI - user setup](images/gui_user_setup.png)
-   
-   - Set a workspace name
-     ![RAG GUI - workspace](images/gui_workspace_name.png)
-   
+  
+     <img src="images/gui_user_setup.png" alt="RAG GUI - user setup" width="400">
+
+   - Set a workspace name:
+     
+     <img src="images/gui_workspace_name.png" alt="RAG GUI - workspace" width="400">
+
    - From the bottom-left corner of the landing page, navigate to the settings menu.
    - In the customization tab, we set a new **logo**, a suitable **app name** (i.e. *AI Assistant*), some **customized messages** for the welcome page, **icon and links** to the main website or a github page, an appropriate **tab title** and finally a nice **favicon**:
-     ![RAG GUI - workspace](images/gui_customization.png)
-   
-   - Go to the embedding tab and set the URL and model
-     ![RAG GUI - workspace](images/gui_embedding.png)
-  
-   - Go to the vector database tab and set the URL
-     ![RAG GUI - workspace](images/gui_vectordb.png)
-      
-   - Set some icons and their links. For example the company's main URL.
-   - Set a proper name for the **AI Assistant**
-    
+     
+     <img src="images/gui_customization.png" alt="RAG GUI - customization" width="400">
+
+   - Go to the embedding tab and set the URL and model:
+     
+     <img src="images/gui_embedding.png" alt="RAG GUI - embedding" width="400">
+
+   - Go to the vector database tab and set the URL:
+     
+     <img src="images/gui_vectordb.png" alt="RAG GUI - vector database" width="400">
 
 ## Contributing
 
@@ -135,4 +140,4 @@ This project is licensed under the terms of the [LICENSE](http://_vscodecontentr
 
 - [Milvus](https://milvus.io/) for vector database capabilities.
 - [Ollama](https://ollama.ai/) for model services.
-- Kubernetes and OpenShift for orchestration and deployment.
+- [AnythingLLM](https://github.com/Mintplex-Labs/anything-llm) for customizable GUI.
