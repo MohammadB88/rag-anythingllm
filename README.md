@@ -72,7 +72,7 @@ Before deploying the solution, ensure you have the following:
    - Make sure all the resources are successfully created and that the pod is running without errors.
    - Now, from OpenShift Console go to the running pod and open the Terminal tab, as shown in the below image:
      
-     <img src="images/pod_terminal.png" alt="ollama - pod terminal" width="400">
+     <img src="images/pod_terminal.png" alt="ollama - pod terminal" width="500">
 
    - At the moment, there are no available models listed for ollama. Hence, we pull two models for this example:
        - A chat LLM model:
@@ -127,6 +127,15 @@ Before deploying the solution, ensure you have the following:
    - Go to the vector database tab and set the URL:
      
      <img src="images/gui_vectordb.png" alt="RAG GUI - vector database" width="400">
+
+5. **Chat with your Documents**:
+   - Now you can upload documents and add URLs, which will be then embedded in the workspace, as shown in these images:
+
+    <img src="images/gui_upload_doc_url0.png" alt="RAG GUI - vector database" width="100">
+    
+    <img src="images/gui_upload_doc_url.png" alt="RAG GUI - vector database" width="400">
+   
+   - The model uses these embedded information to generate a more accurate response with links to the appropriate sources. 
 
 ## Contributing
 
