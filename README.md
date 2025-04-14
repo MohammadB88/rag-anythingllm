@@ -12,11 +12,13 @@ Some of the files and instructions are borrowed from these sources:
 
 The repository is organized as follows:
 
-- **`gui_anythingllm/`**: Contains Kubernetes manifests for deploying the GenAI GUI
-
 - **`milvus/`**: Contains resources for deploying Milvus, a vector database used for efficient similarity search and retrieval
 
 - **`model_ollama/`**: Contains manifests for deploying the Ollama model service
+
+- **`gui_anythingllm/`**: Contains Kubernetes manifests for deploying the GenAI GUI
+
+- **`images/`**: Contains container images or related assets for deployment
 
 
 ## Prerequisites
