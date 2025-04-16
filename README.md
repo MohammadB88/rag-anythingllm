@@ -3,7 +3,7 @@
 This repository contains the manifests and resources required to deploy a Generative AI (GenAI) GUI with a Retrieval-Augmented Generation (RAG) architecture. The project is designed to simplify the deployment of a scalable and efficient GenAI solution. Below is an image illustrating the RAG Architecture for better understanding. 
 
 <div align="center">
-  <img src="images/rag_architecture.png" alt="RAG - Architecture" width="400">
+  <img src="images/rag_architecture.png" alt="RAG - Architecture" width="500">
 </div>
 
 Some of the files and instructions are borrowed from these sources:
