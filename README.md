@@ -1,12 +1,17 @@
 # RAG - AnythingLLM
 
-This repository contains the manifests and resources required to deploy a Generative AI (GenAI) GUI with a Retrieval-Augmented Generation (RAG) architecture. The project is designed to simplify the deployment of a scalable and efficient GenAI solution.
+This repository contains the manifests and resources required to deploy a Generative AI (GenAI) GUI with a Retrieval-Augmented Generation (RAG) architecture. The project is designed to simplify the deployment of a scalable and efficient GenAI solution. Below is an image illustrating the RAG Architecture for better understanding. 
+
+<div align="center">
+  <img src="images/rag_architecture.png" alt="RAG - Architecture" width="400">
+</div>
 
 Some of the files and instructions are borrowed from these sources:
 
 - [Milvus on OpenShift](https://github.com/rh-aiservices-bu/llm-on-openshift/tree/main/vector-databases/milvus)
 - [AnythingLLM on OpenShift](https://github.com/rh-aiservices-bu/llm-on-openshift/blob/main/llm-clients/anythingllm/Readme.md)
 - [Ollama and Open WebUI](https://gautam75.medium.com/deploy-ollama-and-open-webui-on-openshift-c88610d3b5c7)
+- [Minio on Openshift](https://ai-on-openshift.io/tools-and-applications/minio/minio/#validate)
 
 ## Project Structure
 
