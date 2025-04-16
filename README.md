@@ -14,11 +14,14 @@ The repository is organized as follows:
 
 - **`milvus/`**: Contains resources for deploying Milvus, a vector database used for efficient similarity search and retrieval
 
-- **`model_ollama/`**: Contains manifests for deploying the Ollama model service
+- **`minio_on_openshift/`**: Contains manifests for deployeing a minio instance with a persistant volume
 
-- **`gui_anythingllm/`**: Contains Kubernetes manifests for deploying the GenAI GUI
+- **`model_ollama/`**: Contains manifests for deploying the Ollama model service with a persistant volume
 
-- **`images/`**: Contains container images or related assets for deployment
+- **`gui_anythingllm/`**: Contains Kubernetes manifests for deploying the GenAI GUI with a persistant volume
+
+- **`images/`**: Contains images used in the documentation, such as screenshots and diagrams.
+
 
 
 ## Prerequisites
@@ -78,7 +81,16 @@ Before deploying the solution, ensure you have the following:
      ```
    - Make sure all the resources are successfully created and that the pods are running without errors.
 
-2. **Deploy the Ollama Model Service**:
+2. **Deploy the Minio Instance**:
+   - We create a namesapce called **minio** on the cluster.
+   - Navigate to the `minio_on_openshift/` directory.
+   - In the manifests called "**all_resources.yaml**", there is a **PVC**, a **Deployment**, a **Service** and two **routes** to deploy:
+     ```sh
+     kubectl apply -f all_resources.yaml
+     ``` 
+   - Make sure all the resources are successfully created and that the pod is running without errors.
+
+3. **Deploy the Ollama Model Service**:
    - We create a namesapce called **Ollama** on the cluster.
    - Navigate to the `model_ollama/` directory.
    - In the manifests called "**all_resources.yaml**", there is a **PVC**, a **Deployment**, and a **Service** to deploy:
@@ -103,7 +115,7 @@ Before deploying the solution, ensure you have the following:
      
      <img src="images/ollama_model_list.png" alt="ollama - loaded models" width="400">
 
-3. **Deploy the GenAI GUI**:
+4. **Deploy the GenAI GUI**:
    - GenAI GUI will be deployed in its namesapce, as well. 
    - When creating a route for this microservice, this name will appear in the URL. Therefore, we choose a meaningfull name as "**rag-genai**".
    - Navigate to the `gui_anythingllm/` directory.
@@ -116,7 +128,7 @@ Before deploying the solution, ensure you have the following:
      
      <img src="images/gui_first_page.png" alt="RAG GUI - first page" width="400">
 
-4. **Configure the GenAI GUI**:
+5. **Configure the GenAI GUI**:
    - First, we choose ollama as the model runtime and set the base URL and correct chat model. Here, the base URL is built as below:
      ```sh
      BASE_URL = http://OLLAMA_SERVICE:SERVICE_PORT
@@ -144,7 +156,7 @@ Before deploying the solution, ensure you have the following:
      
      <img src="images/gui_vectordb.png" alt="RAG GUI - vector database" width="400">
 
-5. **Chat with your Documents**:
+6. **Chat with your Documents**:
    - Now you can upload documents and add URLs, which will be then embedded in the workspace, as shown in these images:
 
     <img src="images/gui_upload_doc_url0.png" alt="RAG GUI - vector database" width="100">
