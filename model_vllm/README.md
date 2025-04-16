@@ -103,7 +103,7 @@ To deploy models using the vLLM ServingRuntime provided by OpenShift AI, follow 
 3. **Integrate the Model in RAG Architecture**:
    - In order to integrate this deployed model in the RAG architecture, we should use the LLM provider **"Generic OpenAI"** in *settings/LLM Preference*, and set the provided **Inference Endpoint** + **/v1** in openshiftAI as **"BASE_URL"**. For **"Chat Model Name"**, you should use the same name that was configured in the second section, when deploying the model:
     <div align="center">
-      <img src="../images/gui_llm_interface_vllm_openshiftai.png" alt="RAG - Architecture" width="400">
+      <img src="../images/gui_llm_interface_vllm_openshiftai.png" alt="RAG - Architecture" width="500">
     </div>
 
 <!--
