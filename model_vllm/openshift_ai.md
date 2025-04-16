@@ -67,7 +67,7 @@ To deploy models using the vLLM ServingRuntime provided by OpenShift AI, follow 
 2. **Deploy the Model**:
     - Go to the tab **"Models"** on the same project in the OpenShift AI cluster.
     - Enable the model server **"Sinle-Model Serving"** and click on **"Deploy"**.
-    - Give the model a name (e.g. granite7b), select **"vLLM ServingRuntime for KServe"** and model format *"vLLM"*. Choose the model server size according to your model's requirements. Since this serving runtime only works with GPU accelerators, you should choose one at least. 
+    - Give the model an appropriate name, **"Model name"**, accodring to the deployed model (e.g. granite7b), select **"vLLM ServingRuntime for KServe"** and model format *"vLLM"*. Choose the model server size according to your model's requirements. Since this serving runtime only works with GPU accelerators, you should choose one at least. 
     <div align="center">
       <img src="../images/ocpai_model_serving_1.png" alt="RAG - Architecture" width="400">
     </div>
@@ -83,7 +83,29 @@ To deploy models using the vLLM ServingRuntime provided by OpenShift AI, follow 
     </div>
 
 3. **Test the Model Endpoint**:
-   - asd 
+   - There are two ways to test that the model is reachable and responding:
+   1. In Terminal, using these commands:
+        ```sh
+            INFERENCE_ENDPOINT_FROM_OPENSHIFT_AI = #Set the endpoint URL
+            curl ${INFERENCE_ENDPOINT_FROM_OPENSHIFT_AI}/v1/chat/completions \
+            -H "Content-Type: application/json" \
+            -d '{
+                "model": "vllm-gpu",
+                "messages": [
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": "Hello, who are you?"}
+                ]
+            }'
+        ```
+   
+   2. Another possibility is explained in the notebook *"test_model_endpoint.ipynb"*
+
+3. **Integrate the Model in RAG Architecture**:
+   - In order to integrate this deployed model in the RAG architecture, we should use the LLM provider **"Generic OpenAI"** in *settings/LLM Preference*, and set the provided **Inference Endpoint** + **/v1** in openshiftAI as **"BASE_URL"**. For **"Chat Model Name"**, you should use the same name that was configured in the second section, when deploying the model:
+    <div align="center">
+      <img src="../images/gui_llm_interface_vllm_openshiftai.png" alt="RAG - Architecture" width="400">
+    </div>
+
 <!--
 1. **Update the Deployment Manifest**:
    - Modify the vLLM deployment manifest to include the model path and any required environment variables. For example:
