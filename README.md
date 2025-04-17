@@ -39,11 +39,21 @@ Before deploying the solution, ensure you have the following:
 - Sufficient storage and compute resources for the deployment.
 - Access to the required container images for the GUI, Milvus, and Ollama model.
 
-## Deployment Instructions - Skip Minio deployment when you run the model deployment on CPU nodes!!!
+## Deployment Instructions - Model
+In case you have a cluster with only CPU resources, follow the instructions in below page to deploy models using Ollama model server:
+
+[Model Deplyoment on CPU](./cpu_deployment.md)
+
+But if you are lucky to have GPU worker nodes in your Cluster, go to this page, which explains using vLLM model server for model deployment:
+
+[Model Deplyoment on GPU](./gpu_deployment.md) **!!! At the moment, it only works on OpenShift AI !!!**
+
+
+## Deployment Instructions - Vector Database & GUI
+Before deploying the vector database and GUI, make sure that the your model is running and reachable.
 
 1. **Deploy Milvus**:
-
-    - We will install Milvus based on the insttuction from this link [Milvus on OpenShift](https://github.com/rh-aiservices-bu/llm-on-openshift/tree/main/vector-databases/milvus). Accordingly, I have generated the manifest for a standalone deployment.
+   - We will install Milvus based on the insttuction from this link [Milvus on OpenShift](https://github.com/rh-aiservices-bu/llm-on-openshift/tree/main/vector-databases/milvus). Accordingly, I have generated the manifest for a standalone deployment.
    - Navigate to the `milvus/` directory.
    - On the cluster, create a namespace called "**milvus**".
    - We call the release name to be "**vectordb**".
@@ -89,43 +99,6 @@ Before deploying the solution, ensure you have the following:
        -  **user** = **'root'**
        -  **password** = **'Milvus'**
 
-2. **Deploy the Minio Instance (<span style="color:orange;">At the moment, only for model deployment with GPU support!  Skip, if you deploy on CPU nodes.</span>)**:
-   - We create a namesapce called **minio** on the cluster.
-   - Navigate to the `minio_on_openshift/` directory.
-   - In the manifests called "**all_resources.yaml**", there is a **PVC**, a **Deployment**, a **Service** and two **routes** to deploy:
-     ```sh
-     kubectl apply -f all_resources.yaml
-     ``` 
-   - Make sure all the resources are successfully created and that the pod is running without errors.
-   - Default credentials to access Milvus are:
-       -  **user** = **'minio'**
-       -  **password** = **'minio123'**
-
-1. **Deploy the Ollama Model Service**:
-   - We create a namesapce called **Ollama** on the cluster.
-   - Navigate to the `model_ollama/` directory.
-   - In the manifests called "**all_resources.yaml**", there is a **PVC**, a **Deployment**, and a **Service** to deploy:
-     ```sh
-     kubectl apply -f all_resources.yaml
-     ``` 
-   - Make sure all the resources are successfully created and that the pod is running without errors.
-   - Now, from OpenShift Console go to the running pod and open the Terminal tab, as shown in the below image:
-     
-     <img src="images/pod_terminal.png" alt="ollama - pod terminal" width="500">
-
-   - At the moment, there are no available models listed for ollama. Hence, we pull two models for this example:
-       - A chat LLM model:
-        ```sh
-        ollama pull llama3.2:3b
-        ``` 
-       - A model for embedding to populate the vector database:
-        ```sh
-        ollama pull all-minilm:33m
-        ``` 
-   - The models are loaded to be consumed:
-     
-     <img src="images/ollama_model_list.png" alt="ollama - loaded models" width="400">
-
 2. **Deploy the GenAI GUI**:
    - GenAI GUI will be deployed in its namesapce, as well. 
    - When creating a route for this microservice, this name will appear in the URL. Therefore, we choose a meaningfull name as "**rag-genai**".
@@ -140,7 +113,7 @@ Before deploying the solution, ensure you have the following:
      
      <img src="images/gui_first_page.png" alt="RAG GUI - first page" width="400">
 
-1. **Configure the GenAI GUI**:
+3. **Configure the GenAI GUI**:
    - First, we choose ollama as the model runtime and set the base URL and correct chat model. Here, the base URL is built as below:
      ```sh
      BASE_URL = http://OLLAMA_SERVICE:SERVICE_PORT
@@ -168,7 +141,7 @@ Before deploying the solution, ensure you have the following:
      
      <img src="images/gui_vectordb.png" alt="RAG GUI - vector database" width="400">
 
-2. **Chat with your Documents**:
+3. **Chat with your Documents**:
    - Now you can upload documents and add URLs, which will be then embedded in the workspace, as shown in these images:
 
     <img src="images/gui_upload_doc_url0.png" alt="RAG GUI - vector database" width="100">
