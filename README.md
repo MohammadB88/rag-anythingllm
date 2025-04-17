@@ -39,7 +39,7 @@ Before deploying the solution, ensure you have the following:
 - Sufficient storage and compute resources for the deployment.
 - Access to the required container images for the GUI, Milvus, and Ollama model.
 
-## Deployment Instructions
+## Deployment Instructions - Skip Minio deployment when you run the model deployment on CPU nodes!!!
 
 1. **Deploy Milvus**:
 
