@@ -85,8 +85,11 @@ Before deploying the solution, ensure you have the following:
      kubectl apply -f attu-deployment.yaml
      ```
    - Make sure all the resources are successfully created and that the pods are running without errors.
+   - Default credentials to access Milvus are:
+       -  **user** = **'root'**
+       -  **password** = **'Milvus'**
 
-2. **Deploy the Minio Instance**:
+2. **Deploy the Minio Instance (<span style="color:orange;">At the moment, only for model deployment with GPU support!  Skip, if you deploy on CPU nodes.</span>)**:
    - We create a namesapce called **minio** on the cluster.
    - Navigate to the `minio_on_openshift/` directory.
    - In the manifests called "**all_resources.yaml**", there is a **PVC**, a **Deployment**, a **Service** and two **routes** to deploy:
@@ -94,8 +97,11 @@ Before deploying the solution, ensure you have the following:
      kubectl apply -f all_resources.yaml
      ``` 
    - Make sure all the resources are successfully created and that the pod is running without errors.
+   - Default credentials to access Milvus are:
+       -  **user** = **'minio'**
+       -  **password** = **'minio123'**
 
-3. **Deploy the Ollama Model Service**:
+1. **Deploy the Ollama Model Service**:
    - We create a namesapce called **Ollama** on the cluster.
    - Navigate to the `model_ollama/` directory.
    - In the manifests called "**all_resources.yaml**", there is a **PVC**, a **Deployment**, and a **Service** to deploy:
@@ -120,7 +126,7 @@ Before deploying the solution, ensure you have the following:
      
      <img src="images/ollama_model_list.png" alt="ollama - loaded models" width="400">
 
-4. **Deploy the GenAI GUI**:
+2. **Deploy the GenAI GUI**:
    - GenAI GUI will be deployed in its namesapce, as well. 
    - When creating a route for this microservice, this name will appear in the URL. Therefore, we choose a meaningfull name as "**rag-genai**".
    - Navigate to the `gui_anythingllm/` directory.
@@ -129,11 +135,12 @@ Before deploying the solution, ensure you have the following:
      kubectl apply -f all_resources.yaml
      ```
    - Make sure all the resources are successfully created.
+   - AnythingLLM pod listens on port **"8888"**
    - Once the pods are running, the URL can be accessed to begin configuring the interface.
      
      <img src="images/gui_first_page.png" alt="RAG GUI - first page" width="400">
 
-5. **Configure the GenAI GUI**:
+1. **Configure the GenAI GUI**:
    - First, we choose ollama as the model runtime and set the base URL and correct chat model. Here, the base URL is built as below:
      ```sh
      BASE_URL = http://OLLAMA_SERVICE:SERVICE_PORT
@@ -161,7 +168,7 @@ Before deploying the solution, ensure you have the following:
      
      <img src="images/gui_vectordb.png" alt="RAG GUI - vector database" width="400">
 
-6. **Chat with your Documents**:
+2. **Chat with your Documents**:
    - Now you can upload documents and add URLs, which will be then embedded in the workspace, as shown in these images:
 
     <img src="images/gui_upload_doc_url0.png" alt="RAG GUI - vector database" width="100">
