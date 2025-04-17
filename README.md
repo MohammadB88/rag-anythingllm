@@ -50,7 +50,7 @@ But if you are lucky to have GPU worker nodes in your Cluster, go to this page, 
 
 
 ## Deployment Instructions - Vector Database & GUI
-Before deploying the vector database and GUI, make sure that the your model is running and reachable.
+Before deploying the vector database and GUI, make sure that your model is running and reachable.
 
 1. **Deploy Milvus**:
    - We will install Milvus based on the insttuction from this link [Milvus on OpenShift](https://github.com/rh-aiservices-bu/llm-on-openshift/tree/main/vector-databases/milvus). Accordingly, I have generated the manifest for a standalone deployment.

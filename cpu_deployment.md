@@ -13,16 +13,15 @@
      
      <img src="images/pod_terminal.png" alt="ollama - pod terminal" width="500">
 
-   - At the moment, there are no available models listed for ollama. Hence, we pull two models for this example:
+   - At the moment, there are no available models listed for ollama. We can pull two models from [Ollama Model Repository](https://ollama.com/search) for this example:
        - A chat LLM model:
         ```sh
-        ollama pull llama3.2:3b
+        ollama pull MODEL_NAME (e.g. llama3.2:3b)
         ``` 
-       - A model for embedding to populate the vector database:
+       - A model for embedding to populate and later on read from the vector database:
         ```sh
-        ollama pull all-minilm:33m
+        ollama pull MODEL_NAME (e.g. all-minilm:33m)
         ``` 
-   - The models are loaded to be consumed:
+   - Now the models are loaded and ready to answer requests:
      
      <img src="images/ollama_model_list.png" alt="ollama - loaded models" width="400">
-
