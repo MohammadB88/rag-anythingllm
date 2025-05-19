@@ -114,7 +114,7 @@ Before deploying the vector database and GUI, make sure that your model is runni
      <img src="images/gui_first_page.png" alt="RAG GUI - first page" width="400">
 
 3. **Configure the GenAI GUI**:
-   - First, we choose ollama as the model runtime and set the base URL and correct chat model. Here, the base URL is built as below:
+   - First, we choose ollama as the model runtime and set the base URL and correct chat model (i.e. *"llama3.2:3b"*). Here, the base URL is built as below (i.e. *"http://ollama.model-ollama.svc.cluster.local:11434"*).:
      ```sh
      BASE_URL = http://OLLAMA_SERVICE:SERVICE_PORT
      ```
@@ -133,15 +133,22 @@ Before deploying the vector database and GUI, make sure that your model is runni
      
      <img src="images/gui_customization.png" alt="RAG GUI - customization" width="400">
 
-   - Go to the embedding tab and set the URL and model:
+   - Go to the embedding tab and set the URL and model. As an example, if milvus instance is deployed on the same cluster and password is set to default:
+      - **URL:** ***"http://ollama.model-ollama.svc.cluster.local:11434"***
+      - **Embedding Model:** **"all-minilm:33m"**
+      - **Max Embedding Chunk Length:** **"8192"**
+  
      
      <img src="images/gui_embedding.png" alt="RAG GUI - embedding" width="400">
 
-   - Go to the vector database tab and set the URL:
-     
+   - Go to the vector database tab and set the URL. As an example, if milvus instance is deployed on the same cluster and password is set to default:
+      - **URL:** ***"http://vectordb-milvus.milvus.svc.cluster.local:19530"***
+      - **USERNAME:** **"root"**
+      - **PASSWORD:** **"Milvus"**
+  
      <img src="images/gui_vectordb.png" alt="RAG GUI - vector database" width="400">
 
-3. **Chat with your Documents**:
+4. **Chat with your Documents**:
    - Now you can upload documents and add URLs, which will be then embedded in the workspace, as shown in these images:
 
     <img src="images/gui_upload_doc_url0.png" alt="RAG GUI - vector database" width="100">
