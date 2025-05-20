@@ -16,6 +16,7 @@ This roadmap outlines the planned features and improvements for the project.
 - [ ] Add instruction for downloading models onto ollama in its directory
 - [ ] Add instruction for model deployment with vllm (cpu & gpu) in its directory
 - [ ] Add instruction for deployment the milvus vector-database in its directory
+- [ ] Add instruction for model deployment with Nvidia NIM (only gpu) in its directory
 
 ## 🗓️ Upcoming
 

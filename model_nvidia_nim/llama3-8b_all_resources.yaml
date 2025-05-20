@@ -1,0 +1,106 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: llama3-8b-nim-cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ngc-api-key
+type: Opaque
+stringData:
+  api-key: API_KEY_GENERATED_FROM_NGC
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llama3-8b-instruct
+  labels:
+    app: llama3-8b-instruct
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llama3-8b-instruct
+  template:
+    metadata:
+      labels:
+        app: llama3-8b-instruct
+    spec:
+      containers:
+      - name: llama3-8b-instruct
+        image: nvcr.io/nim/meta/llama3-8b-instruct:1.0.0
+        ports:
+        - containerPort: 8000
+        env:
+        - name: NGC_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ngc-api-key
+              key: api-key
+        volumeMounts:
+        - name: llama3-8b-nim-cache
+          mountPath: /opt/nim/.cache
+        resources:
+          limits:
+            cpu: "8"
+            memory: 24Gi
+            nvidia.com/gpu: "1"
+          requests: 
+            cpu: "6"
+      volumes:
+      - name: llama3-8b-nim-cache
+        persistentVolumeClaim:
+          claimName: llama3-8b-nim-cache
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+      imagePullSecrets:
+      - name: nim-pull-secret
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: llama3-8b-instruct
+  labels:
+    app: llama3-8b-instruct
+spec:
+  clusterIP: None
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: http
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    app: llama3-8b-instruct
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: llama3-8b-instruct
+  labels:
+    app: llama3-8b-instruct
+spec:
+  to:
+    kind: Service
+    name: mistral-7b-instruct
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  wildcardPolicy: None
