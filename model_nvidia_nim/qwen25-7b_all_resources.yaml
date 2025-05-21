@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mistral-7b-nim-cache
+  name: qwen25-7b-nim-cache
 spec:
   accessModes:
     - ReadWriteOnce
@@ -22,22 +22,22 @@ stringData:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mistral-7b-instruct
+  name: qwen25-7b-instruct
   labels:
-    app: mistral-7b-instruct
+    app: qwen25-7b-instruct
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mistral-7b-instruct
+      app: qwen25-7b-instruct
   template:
     metadata:
       labels:
-        app: mistral-7b-instruct
+        app: qwen25-7b-instruct
     spec:
       containers:
-      - name: mistral-7b-instruct
-        image: nvcr.io/nim/mistralai/mistral-7b-instruct-v0.3:latest
+      - name: qwen25-7b-instruct
+        image: nvcr.io/nim/qwen/qwen-2.5-7b-instruct:latest
         ports:
         - containerPort: 8000
         env:
@@ -47,7 +47,7 @@ spec:
               name: ngc-api-key
               key: api-key
         volumeMounts:
-        - name: mistral-7b-nim-cache
+        - name: qwen25-7b-nim-cache
           mountPath: /opt/nim/.cache
         resources:
           limits:
@@ -57,9 +57,9 @@ spec:
           requests: 
             cpu: "6"
       volumes:
-      - name: mistral-7b-nim-cache
+      - name: qwen25-7b-nim-cache
         persistentVolumeClaim:
-          claimName: mistral-7b-nim-cache
+          claimName: qwen25-7b-nim-cache
       tolerations:
       - key: nvidia.com/gpu
         operator: Exists
@@ -70,9 +70,9 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: mistral-7b-instruct
+  name: qwen25-7b-instruct
   labels:
-    app: mistral-7b-instruct
+    app: qwen25-7b-instruct
 spec:
   clusterIP: None
   ipFamilies:
@@ -86,18 +86,18 @@ spec:
   ipFamilyPolicy: SingleStack
   sessionAffinity: None
   selector:
-    app: mistral-7b-instruct
+    app: qwen25-7b-instruct
 ---
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: mistral-7b-instruct
+  name: qwen25-7b-instruct
   labels:
-    app: mistral-7b-instruct
+    app: qwen25-7b-instruct
 spec:
   to:
     kind: Service
-    name: mistral-7b-instruct
+    name: qwen25-7b-instruct
     weight: 100
   port:
     targetPort: http

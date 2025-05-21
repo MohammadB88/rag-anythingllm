@@ -97,7 +97,7 @@ metadata:
 spec:
   to:
     kind: Service
-    name: mistral-7b-instruct
+    name: llama3-8b-instruct
     weight: 100
   port:
     targetPort: http
