@@ -39,14 +39,14 @@ Before deploying the solution, ensure you have the following:
 - Sufficient storage and compute resources for the deployment.
 - Access to the required container images for the GUI, Milvus, and Ollama model.
 
-## Deployment Instructions - Model
-In case you have a cluster with only CPU resources, follow the instructions in below page to deploy models using Ollama model server:
+## Deployment Instructions - Models on CPU or GPU nodes
+In case you have a cluster with only CPU resources, follow the below instructions to deploy models using ``Ollama`` model runtime server:
 
-[Model Deplyoment on CPU](./cpu_deployment.md)
+[Model Deplyoment on CPU](./model_ollama/README.md)
 
-But if you are lucky to have GPU worker nodes in your Cluster, go to this page, which explains using vLLM model server for model deployment:
+But if you are lucky to have GPU worker nodes in your Cluster, go to this page, which explains using ``vLLM`` model runtime for model deployment:
 
-[Model Deplyoment on GPU](./gpu_deployment.md) **!!! At the moment, it only works on OpenShift AI !!!**
+[Model Deplyoment on GPU](./gpu_deployment.md) **!!! Attention: At the moment, it only works on OpenShift AI !!!**
 
 
 ## Deployment Instructions - Vector Database
@@ -114,7 +114,7 @@ Before deploying the vector database and GUI, make sure that your model is runni
      
      <img src="images/gui_first_page.png" alt="RAG GUI - first page" width="400">
 
-## Configuring the GUI - Personalization
+## Configuring the LLM Endpoint - Ollama & vLLM & NIM
 Here, we use the customization capabilities of *'AnythingLLM'* to personalize the experience with the *'AI Assistant'*:
    - First, we choose ollama as the model runtime and set the base URL and correct chat model (i.e. *"llama3.2:3b"*). Here, the base URL is built as below (i.e. *"http://ollama.model-ollama.svc.cluster.local:11434"*).:
      ```sh
