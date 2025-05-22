@@ -1,5 +1,9 @@
 # Model Deployment with Ollama Runtime
 
+<p align="center">
+ <img src="../images/ollama_logo.png" alt="ollama - logo" width="500">
+</p>
+
 ## Introduction
 
 Ollama is a lightweight, container-friendly runtime designed for serving large language models (LLMs) with minimal overhead. It enables fast and efficient deployment of pre-trained models on both CPU and GPU environments, making it ideal for edge deployments, local development, or lightweight inference tasks within Kubernetes platforms like OpenShift.
