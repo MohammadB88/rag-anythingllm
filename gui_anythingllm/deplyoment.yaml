@@ -21,9 +21,10 @@ spec:
             claimName: ai-assistant-pvc
       containers:
         - name: ai-assistant
-          image: quay.io/rh-aiservices-bu/anythingllm-workbench:1.7.4
+          image: quay.io/rh-aiservices-bu/anythingllm-workbench:1.8.5
           ports:
           - containerPort: 8888
           volumeMounts:
           - mountPath: /opt/app-root/src
+
             name: ai-assistant-pvc
