@@ -33,7 +33,7 @@ spec:
             claimName: ai-assistant-pvc
       containers:
         - name: ai-assistant
-          image: quay.io/rh-aiservices-bu/anythingllm-workbench:1.8.2
+          image: quay.io/rh-aiservices-bu/anythingllm-workbench:1.8.5
           ports:
           - containerPort: 8888
           volumeMounts:
@@ -68,4 +68,5 @@ spec:
   port:
     targetPort: 8888
   alternateBackends: []
+
 
