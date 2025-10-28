@@ -1,6 +1,6 @@
 # Grafana on OpenShift
 
-I used the instruction in this Link to deploy Grafana on OpenShift
+I used the instruction in this Link (Adding Grafana Dashboard in the Red Hat OpenShift Cluster)[https://docs.tibco.com/pub/wfce/1.3.0/doc/html/Installation-and-Deployment-Guide/Grafana_using_Prometheus.htm] to deploy Grafana on OpenShift
 
 **NOTE**
 IT IS IMPORTANT TO USE https instead of http when setting the thanos-guerier as endpoint to access Prometheus.
