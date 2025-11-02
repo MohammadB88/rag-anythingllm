@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-model-store
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1       # latest stable
+kind: Deployment
+metadata:
+  name: test-model-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-model
+  template:
+    metadata:
+      labels:
+        app: test-model
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-0-48-141.us-east-2.compute.internal
+      initContainers:
+      - name: init-s3-download
+        image: amazon/aws-cli:2.27.50
+        command:
+          - sh
+          - -c
+          - |
+            aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID" && \
+            aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY" && \
+            aws configure set region "$AWS_REGION" && \
+            aws --endpoint-url "$AWS_ENDPOINT_URL" s3 cp "s3://$S3_BUCKET/meta/llama-3-2-1b-instruct" /data/llama-3-2-1b-instruct --recursive
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: s3-model-secret
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: s3-model-secret
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: s3-model-secret
+                key: AWS_REGION
+          - name: S3_BUCKET
+            value: "nim-models"
+          - name: AWS_ENDPOINT_URL
+            valueFrom:
+              secretKeyRef:
+                name: s3-model-secret
+                key: AWS_ENDPOINT_URL
+        volumeMounts:
+          - name: model-data
+            mountPath: /data
+          - name: aws-conf
+            mountPath: /.aws
+      containers:
+      - name: llama3-8b-instruct
+        image: nvcr.io/nim/meta/llama-3.2-1b-instruct:1.8.6
+        args:
+          - sleep
+          - 1000s
+        ports:
+        - containerPort: 8000
+        env:
+        - name: NIM_MODEL_REPO
+          value: /mnt/model_repo
+        - name: NIM_MODEL_NAME
+          value: /mnt/model_repo
+        volumeMounts:
+          - name: model-data
+            mountPath: /mnt        
+      imagePullSecrets:
+      - name: nim-pull-secret
+      volumes:
+        - name: aws-conf
+          emptyDir: {}   # writable storage 
+        - name: model-data
+          persistentVolumeClaim:
+            claimName: pvc-model-store

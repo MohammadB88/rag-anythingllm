@@ -1,0 +1,48 @@
+apiVersion: apps/v1       # latest stable
+kind: Deployment
+metadata:
+  name: aws-cli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws-cli
+  template:
+    metadata:
+      labels:
+        app: aws-cli
+    spec:
+      containers:
+      - name: init-s3-download
+        image: amazon/aws-cli:2.27.50
+        command: 
+          - sh
+          - -c
+          - sleep 1000s
+        volumeMounts:
+        - name: aws-conf
+          mountPath: /.aws
+      volumes:
+      - name: aws-conf
+        emptyDir: {}   # writable storage
+---
+apiVersion: apps/v1       # latest stable
+kind: Deployment
+metadata:
+  name: testcurl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: testcurl
+  template:
+    metadata:
+      labels:
+        app: testcurl
+    spec:
+      containers:
+      - name: init-s3-download
+        image: curlimages/curl:latest
+        args:
+          - sleep
+          - 1000s

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: llama3-8b-nim-cache
+  name: llama3-2-1b-nim-cache
 spec:
   accessModes:
     - ReadWriteOnce
@@ -22,22 +22,22 @@ stringData:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: llama3-8b-instruct
+  name: llama3-2-1b-instruct
   labels:
-    app: llama3-8b-instruct
+    app: llama3-2-1b-instruct
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: llama3-8b-instruct
+      app: llama3-2-1b-instruct
   template:
     metadata:
       labels:
-        app: llama3-8b-instruct
+        app: llama3-2-1b-instruct
     spec:
       containers:
-      - name: llama3-8b-instruct
-        image: nvcr.io/nim/meta/llama-3.1-8b-instruct:1.12.0
+      - name: llama3-2-1b-instruct
+        image: nvcr.io/nim/meta-llama/Llama-3.2-1B-Instruct:1.8.5
         ports:
         - containerPort: 8000
         env:
@@ -45,9 +45,9 @@ spec:
           valueFrom:
             secretKeyRef:
               name: ngc-api-key
-              key: NGC_API_KEY
+              key: api-key
         volumeMounts:
-        - name: llama3-8b-nim-cache
+        - name: llama3-2-1b-nim-cache
           mountPath: /opt/nim/.cache
         resources:
           limits:
@@ -57,9 +57,9 @@ spec:
           requests: 
             cpu: "6"
       volumes:
-      - name: llama3-8b-nim-cache
+      - name: llama3-2-1b-nim-cache
         persistentVolumeClaim:
-          claimName: llama3-8b-nim-cache
+          claimName: llama3-2-1b-nim-cache
       tolerations:
       - key: nvidia.com/gpu
         operator: Exists
@@ -70,9 +70,9 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: llama3-8b-instruct
+  name: llama3-2-1b-instruct
   labels:
-    app: llama3-8b-instruct
+    app: llama3-2-1b-instruct
 spec:
   clusterIP: None
   ipFamilies:
@@ -86,18 +86,18 @@ spec:
   ipFamilyPolicy: SingleStack
   sessionAffinity: None
   selector:
-    app: llama3-8b-instruct
+    app: llama3-2-1b-instruct
 ---
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: llama3-8b-instruct
+  name: llama3-2-1b-instruct
   labels:
-    app: llama3-8b-instruct
+    app: llama3-2-1b-instruct
 spec:
   to:
     kind: Service
-    name: llama3-8b-instruct
+    name: llama3-2-1b-instruct
     weight: 100
   port:
     targetPort: 8000

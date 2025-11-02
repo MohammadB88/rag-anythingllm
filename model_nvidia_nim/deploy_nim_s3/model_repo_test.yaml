@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-model-repo-store
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1       # latest stable
+kind: Deployment
+metadata:
+  name: test-model-repo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-model-repo
+  template:
+    metadata:
+      labels:
+        app: test-model-repo
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-0-48-141.us-east-2.compute.internal
+      containers:
+      - name: llama3-8b-instruct
+        image: nvcr.io/nim/meta/llama-3.2-1b-instruct:1.8.6
+        args:
+          - sleep
+          - 1000s
+        ports:
+        - containerPort: 8000
+        env:
+        volumeMounts:
+          - name: model-data
+            mountPath: /mnt        
+      imagePullSecrets:
+      - name: nim-pull-secret
+      volumes:
+        - name: model-data
+          persistentVolumeClaim:
+            claimName: pvc-model-repo-store
