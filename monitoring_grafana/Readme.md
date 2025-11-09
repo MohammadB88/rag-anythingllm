@@ -22,7 +22,7 @@ In OpenShift, there are typically two Prometheus instances:
 If you’re using the cluster monitoring stack (openshift-monitoring), **Prometheus won’t scrape custom namespaces unless configured to do so**.
 
 ### Enable user workload monitoring (if not already):
-If try this command: 
+When trying this command: 
 
 ````
 oc get configmap cluster-monitoring-config -n openshift-monitoring -o yaml
