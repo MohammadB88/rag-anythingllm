@@ -85,6 +85,8 @@ The Prometheus UI (via oc port-forward svc/prometheus-user-workload 9090)
 The OpenShift Console → Observe → Targets
 
 
+# Sample NIM-Dashboard - NameSpace nim-model
+In this directory, there is a file called "sample_nim-dashboard" which I configured to capture the metrices from models in namspace "nim-model"
 
 # ????Grafana on OpenShift - Grafana-Operator Community Edition
 There is also another documentation, but with Grafana-Operator community edition:
