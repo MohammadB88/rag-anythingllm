@@ -62,9 +62,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    app: meta-llama3-1b-instruct
-  name: meta-llama3-1b-instruct
-  namespace: 1nim-model
+    app: llama3-2-1b-instruct
+  name: llama3-2-1b-instruct
+  namespace: nim-model
 spec:
   endpoints:
     - interval: 30s
@@ -75,7 +75,7 @@ spec:
   namespaceSelector: {}
   selector:
     matchLabels:
-      app.kubernetes.io/name: meta-llama3-1b-instruct
+      app: llama3-2-1b-instruct
 ```
 
 Once deployed, your ServiceMonitor (in example-namespace) should then appear in:
