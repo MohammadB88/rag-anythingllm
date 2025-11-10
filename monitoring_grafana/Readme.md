@@ -88,6 +88,10 @@ The OpenShift Console → Observe → Targets
 # Sample NIM-Dashboard - NameSpace nim-model
 In this directory, there is a file called "nim_dashboard_sample.json" which I configured to capture the metrices from models in namspace "nim-model"
 
+# Sample Dashboard for GPU Utilization
+I have downloaded this dashboard from (NVIDIA DCGM Exporter Dashboard)[https://grafana.com/grafana/dashboards/12239-nvidia-dcgm-exporter-dashboard/]
+
+
 # ????Grafana on OpenShift - Grafana-Operator Community Edition
 There is also another documentation, but with Grafana-Operator community edition:
 https://docs.nvidia.com/launchpad/infrastructure/tanzu-it/latest/openshift-it-step-05.html
