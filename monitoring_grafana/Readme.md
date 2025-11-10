@@ -69,7 +69,7 @@ spec:
   endpoints:
     - interval: 30s
       path: /v1/metrics
-      port: api   # portname or 8000
+      port: http   # portname (for out nim deployment portname is 'http') or 8000
       scheme: http
       scrapeTimeout: 10s
   namespaceSelector: {}
