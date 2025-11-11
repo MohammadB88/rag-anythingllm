@@ -17,7 +17,7 @@ metadata:
   name: ngc-api-key
 type: Opaque
 stringData:
-  api-key: API_KEY_GENERATED_FROM_NGC
+  NGC_API_KEY: API_KEY_GENERATED_FROM_NGC
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -45,7 +45,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: ngc-api-key
-              key: api-key
+              key: NGC_API_KEY
         volumeMounts:
         - name: llama3-2-1b-nim-cache
           mountPath: /opt/nim/.cache
