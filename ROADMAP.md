@@ -20,9 +20,5 @@ This roadmap outlines the planned features and improvements for the project.
 
 ## 🗓️ Upcoming
 
-- [ ] Add workshop materials and Hands-On Projects for different niveaus
-  - [ ] Beginner
-  - [ ] Intermediate
-  - [ ] Advanced  
 - [ ] Implement API-endpoints from other model providers like watsonx.ai, NVIDIA NIM, ...
 
