@@ -6,6 +6,10 @@ This repository contains the manifests and resources required to deploy a Genera
   <img src="images/rag_architecture.png" alt="RAG - Architecture" width="500">
 </div>
 
+
+**There is a Roadmap for this project:** [Roadmap](./ROADMAP.md)
+
+
 Some of the files and instructions are borrowed from these sources:
 
 - [Milvus on OpenShift](https://github.com/rh-aiservices-bu/llm-on-openshift/tree/main/vector-databases/milvus)
@@ -173,4 +177,5 @@ This project is licensed under the terms of the [LICENSE](http://_vscodecontentr
 
 - [Milvus](https://milvus.io/) for vector database capabilities.
 - [Ollama](https://ollama.ai/) for model services.
+
 - [AnythingLLM](https://github.com/Mintplex-Labs/anything-llm) for customizable GUI.
