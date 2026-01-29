@@ -17,7 +17,7 @@ For scalable deployments, use Kubernetes with the following steps:
 Create an Image Pull Secret to pull NIM images from *"nvcr.io"* container registery:
 
 ```shell
-oc create secret docker-registry nim-pull-secret --docker-username='$oauthtoken' --docker-server='nvcr.io' --docker-password='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'
+oc create secret docker-registry nim-pull-secret --docker-username='$oauthtoken' --docker-server='nvcr.io' --docker-password='nvapi-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 ```
 
 ### Create the NGC API Key Secret:
