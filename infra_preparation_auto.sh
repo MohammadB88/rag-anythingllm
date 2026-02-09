@@ -13,10 +13,33 @@ warn() { echo -e "${DEFAULT}" "$(date +%H:%M:%S)" "${YELLOW}" "$*" "${RESET}" >&
 die()  { echo -e "${DEFAULT}" "$(date +%H:%M:%S)" "${RED}" "$*" "${RESET}" >&2; exit 1; }
 
 
-MANIFEST="manifest.yaml"
-NAMESPACE="default"
+# -----------------------------
+# Ask for dry-run
+# -----------------------------
+read -rp "Run in dry-run mode? [y/N]: " DRY_RUN_INPUT
 
-echo "Deploying Kubernetes manifest..."
-log kubectl apply -n "$NAMESPACE" -f "$MANIFEST" --dry-run=client
+if [[ "${DRY_RUN_INPUT,,}" == "y" || "${DRY_RUN_INPUT,,}" == "yes" ]]; then
+  DRY_RUN="--dry-run=client"
+  log "Dry-run mode ENABLED"
+else
+  DRY_RUN=""
+  warn "Dry-run mode DISABLED (resources will be deleted)"
+fi
 
-echo "Deployment complete."
+# -----------------------------
+# Delete GitOps resources
+# -----------------------------
+delete_resources() {
+  local resource="$1"
+
+  log "Deleting ${resource} (all namespaces)..."
+
+  oc get "$resource" --all-namespaces -o name 2>/dev/null \
+    | xargs -r oc delete $DRY_RUN
+}
+
+delete_resources applications.argoproj.io
+delete_resources applicationsets.argoproj.io
+delete_resources appprojects.argoproj.io
+
+log "GitOps cleanup completed."
