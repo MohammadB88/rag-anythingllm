@@ -42,4 +42,20 @@ delete_resources applications.argoproj.io
 delete_resources applicationsets.argoproj.io
 delete_resources appprojects.argoproj.io
 
-log "GitOps cleanup completed."
+
+# -----------------------------
+# Verification
+# -----------------------------
+log "Verifying remaining GitOps resources..."
+
+for resource in \
+  applications.argoproj.io \
+  applicationsets.argoproj.io \
+  appprojects.argoproj.io
+do
+  echo
+  log "Remaining ${resource}:"
+  oc get "$resource" --all-namespaces || true
+done
+
+log "GitOps cleanup script finished."
