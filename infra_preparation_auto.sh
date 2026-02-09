@@ -14,6 +14,14 @@ die()  { echo -e "${DEFAULT}" "$(date +%H:%M:%S)" "${RED}" "$*" "${RESET}" >&2; 
 
 
 # -----------------------------
+# Ask for namespace
+# -----------------------------
+read -rp "Namespace containing GitOps resources [openshift-gitops]: " NAMESPACE
+NAMESPACE="${NAMESPACE:-openshift-gitops}"
+
+log "Using namespace: ${NAMESPACE}"
+
+# -----------------------------
 # Ask for dry-run
 # -----------------------------
 read -rp "Run in dry-run mode? [y/N]: " DRY_RUN_INPUT
@@ -27,26 +35,32 @@ else
 fi
 
 # -----------------------------
+# Pre-check: namespace exists
+# -----------------------------
+if ! oc get namespace "$NAMESPACE" >/dev/null 2>&1; then
+  die "Namespace '$NAMESPACE' does not exist"
+fi
+
+# -----------------------------
 # Delete GitOps resources
 # -----------------------------
 delete_resources() {
   local resource="$1"
 
-  log "Deleting ${resource} (all namespaces)..."
+  log "Deleting ${resource} in namespace ${NAMESPACE}..."
 
-  oc get "$resource" --all-namespaces -o name 2>/dev/null \
-    | xargs -r oc delete $DRY_RUN
+  oc get "$resource" -n "$NAMESPACE" -o name 2>/dev/null \
+    | xargs -r oc delete -n "$NAMESPACE" $DRY_RUN
 }
 
 delete_resources applications.argoproj.io
 delete_resources applicationsets.argoproj.io
 delete_resources appprojects.argoproj.io
 
-
 # -----------------------------
 # Verification
 # -----------------------------
-log "Verifying remaining GitOps resources..."
+log "Verifying remaining GitOps resources in ${NAMESPACE}..."
 
 for resource in \
   applications.argoproj.io \
@@ -55,7 +69,7 @@ for resource in \
 do
   echo
   log "Remaining ${resource}:"
-  oc get "$resource" --all-namespaces || true
+  oc get "$resource" -n "$NAMESPACE" || true
 done
 
 log "GitOps cleanup script finished."
