@@ -66,11 +66,13 @@ By default, no models are loaded. You’ll need to pull models from the [Ollama 
 
 - **Chat model:** (e.g. llama3.2:3b)
 - **Embedding model:** (e.g. all-minilm:33m)
+- **Agent-Calling model:** (e.g. qwen2.5:7b)
 
 Run the following commands inside the pod terminal:
 ```sh
   ollama pull llama3.2:3b 
-  ollama pull all-minilm:33m 
+  ollama pull all-minilm:33m
+  ollama pull qwen2.5:7b / mistral:7b
 ``` 
 
 Embedding models populates and later on reads from the vector database.

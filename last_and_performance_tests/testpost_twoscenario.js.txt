@@ -1,0 +1,53 @@
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export const options = {
+  scenarios: {
+    stress: {
+      executor: 'ramping-vus',
+      startVUs: 50,
+      stages: [
+        { duration: '30s', target: 500 },
+        { duration: '5m',  target: 500 },
+      ],
+      gracefulRampDown: '30s',
+    },
+    spike: {
+      executor: 'ramping-vus',
+      startVUs: 200,
+      stages: [
+        { duration: '10s', target: 500 },   // very fast spike up
+        { duration: '40s', target: 500 },   // hold peak
+        { duration: '10s', target: 200 },   // ramp down
+      ],
+      gracefulRampDown: '30s',
+    },
+  },
+};
+
+export default function () {
+  const BASE_URL = __ENV.BASE_URL || 'http://llama3-2-1b-instruct.llms.svc.cluster.local:8000';
+  const url = `${BASE_URL}/v1/completions`;
+
+  const payload = JSON.stringify({
+    model: 'meta/llama-3.2-1b-instruct',
+    prompt: 'Say something short.',
+    max_tokens: 30,
+  });
+
+  const params = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    timeout: '120s',
+  };
+
+  const res = http.post(url, payload, params);
+
+  check(res, {
+    'status is 200':     (r) => r.status === 200,
+    'body is not empty': (r) => typeof r.body === 'string' && r.body.length > 0,
+  });
+
+  sleep(0.5);
+}
