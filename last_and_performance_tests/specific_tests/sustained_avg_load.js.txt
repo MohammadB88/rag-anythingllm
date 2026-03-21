@@ -1,0 +1,92 @@
+// sustained_avg_load.js
+// Simulates observed average usage: ~64 req/min over a sustained period
+// Target: 961 requests / 15 min window (~64 req/min)
+
+import http from "k6/http";
+import { check, sleep } from "k6";
+import { Trend, Rate, Counter } from "k6/metrics";
+import { SharedArray } from "k6/data";
+
+const TTFT = new Trend("ttft_ms", true);
+const tokenRate = new Trend("tokens_per_sec");
+const errorRate = new Rate("error_rate");
+const totalTokens = new Counter("total_output_tokens");
+
+// --- CONFIG ---
+const BASE_URL = __ENV.BASE_URL || "https://your-model-endpoint";
+const API_KEY = __ENV.API_KEY || "your-api-key";
+const MODEL = __ENV.MODEL || "gpt-oss-120b";
+
+// Loaded once at init time and shared across all VUs
+const PROMPTS = new SharedArray("prompts", function () {
+  return JSON.parse(open("./prompts.json"));
+});
+
+export const options = {
+  scenarios: {
+    sustained_load: {
+      executor: "constant-arrival-rate",
+      rate: 64,           // requests per minute (~average observed)
+      timeUnit: "1m",
+      duration: "20m",    // run longer than 15 min to capture steady state
+      preAllocatedVUs: 80,
+      maxVUs: 120,
+    },
+  },
+  thresholds: {
+    ttft_ms: ["p(95)<5000"],          // TTFT p95 < 5s
+    http_req_duration: ["p(95)<30000"], // Total p95 < 30s
+    error_rate: ["rate<0.01"],          // < 1% errors
+  },
+};
+
+export default function () {
+  const prompt = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
+
+  const payload = JSON.stringify({
+    model: MODEL,
+    messages: [
+      { role: "system", content: prompt.system },
+      { role: "user", content: prompt.user },
+    ],
+    max_tokens: 2800,   // matches observed avg output token count
+    stream: false,
+  });
+
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${API_KEY}`,
+    },
+    timeout: "60s",
+  };
+
+  const start = Date.now();
+  const res = http.post(`${BASE_URL}/v1/chat/completions`, payload, params);
+  const duration = Date.now() - start;
+
+  const ok = check(res, {
+    "status 200": (r) => r.status === 200,
+    "has choices": (r) => {
+      try { return JSON.parse(r.body).choices?.length > 0; } catch { return false; }
+    },
+  });
+
+  errorRate.add(!ok);
+
+  if (ok) {
+    const body = JSON.parse(res.body);
+    const outputTokens = body.usage?.completion_tokens || 0;
+    const inputTokens = body.usage?.prompt_tokens || 0;
+
+    totalTokens.add(outputTokens);
+    TTFT.add(duration); // Approximation — replace with streaming TTFT if possible
+
+    if (duration > 0 && outputTokens > 0) {
+      tokenRate.add((outputTokens / duration) * 1000); // tokens/sec
+    }
+  }
+
+  // Think time: users average <1 req/min — simulate reading/processing time
+  sleep(Math.random() * 10 + 5); // 5–15s think time between requests per VU
+}
