@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: gpu-operator-warning-rules
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: gpu-warning.rules
+      rules:
+        - alert: GPUMemoryHigh
+          expr: DCGM_FI_DEV_FB_USED / (DCGM_FI_DEV_FB_USED + DCGM_FI_DEV_FB_FREE) > 0.85
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU memory high"
+            description: "GPU memory usage is above 85% for more than 10 minutes."
+
+        - alert: GPUTemperatureHigh
+          expr: DCGM_FI_DEV_GPU_TEMP > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU temperature high"
+            description: "GPU temperature is above 80C for more than 5 minutes."
+
+        - alert: GPUUtilizationHigh
+          expr: DCGM_FI_DEV_GPU_UTIL > 90
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU utilization high"
+            description: "GPU utilization is above 90% for more than 10 minutes."
+
+        - alert: GPUPowerNearLimit
+          expr: DCGM_FI_DEV_POWER_USAGE / DCGM_FI_DEV_POWER_LIMIT > 0.9
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU power near limit"
+            description: "GPU power draw is above 90% of the power limit for more than 5 minutes."
+
+        - alert: GPUUnderutilized
+          expr: DCGM_FI_DEV_GPU_UTIL < 30
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU underutilized"
+            description: "GPU utilization is below 30% for more than 15 minutes."

@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: gpu-operator-cluster-health-rules
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: gpu-cluster-health.rules
+      rules:
+        - alert: DCGMExporterDown
+          expr: up{job=~".*dcgm.*|.*gpu.*"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "DCGM exporter down"
+            description: "The GPU metrics exporter is not being scraped for more than 5 minutes."
+
+        - alert: GPUDriverNotReady
+          expr: kube_pod_container_status_ready{namespace="gpu-operator", pod=~".*driver.*"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "GPU driver pod not ready"
+            description: "The GPU driver component is not ready for more than 10 minutes."
+
+        - alert: GPUToolkitNotReady
+          expr: kube_pod_container_status_ready{namespace="gpu-operator", pod=~".*toolkit.*"} == 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU toolkit pod not ready"
+            description: "The GPU toolkit component is not ready for more than 10 minutes."
+
+        - alert: GPUNodeNotReady
+          expr: kube_node_status_condition{condition="Ready", status="true"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "GPU node not ready"
+            description: "A node with GPU capacity is not in Ready state."
+
+        - alert: GPUErrorsIncreasing
+          expr: increase(DCGM_FI_DEV_XID_ERRORS[10m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: "GPU XID errors increasing"
+            description: "GPU XID errors have increased in the last 10 minutes."

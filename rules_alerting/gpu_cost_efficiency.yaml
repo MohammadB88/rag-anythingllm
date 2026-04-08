@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: gpu-operator-cost-efficiency-rules
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: gpu-cost-efficiency.rules
+      rules:
+        - alert: GPUUnderutilized
+          expr: DCGM_FI_DEV_GPU_UTIL < 30
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU underutilized"
+            description: "GPU utilization is below 30% for more than 30 minutes."
+
+        - alert: GPUMemoryHighComputeLow
+          expr: (DCGM_FI_DEV_FB_USED / (DCGM_FI_DEV_FB_USED + DCGM_FI_DEV_FB_FREE) > 0.80) and (DCGM_FI_DEV_GPU_UTIL < 40)
+          for: 20m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High memory, low compute"
+            description: "GPU memory is high while compute utilization remains low."
+
+        - alert: GPUImbalanceDetected
+          expr: max by (node) (DCGM_FI_DEV_GPU_UTIL) - min by (node) (DCGM_FI_DEV_GPU_UTIL) > 50
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU imbalance detected"
+            description: "One or more GPUs on the node are heavily loaded while others are mostly idle."
+
+        - alert: GPUPowerInefficient
+          expr: (DCGM_FI_DEV_POWER_USAGE / DCGM_FI_DEV_POWER_LIMIT > 0.85) and (DCGM_FI_DEV_GPU_UTIL < 50)
+          for: 20m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Power usage inefficient"
+            description: "GPU is drawing high power without corresponding utilization."
+
+        - alert: IdleGPUOnExpensiveNode
+          expr: DCGM_FI_DEV_GPU_UTIL < 20
+          for: 45m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Idle GPU on expensive node"
+            description: "GPU has been mostly idle for an extended period."
