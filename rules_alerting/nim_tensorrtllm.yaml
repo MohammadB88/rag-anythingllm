@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nim-embedding-trt-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: nim-embedding.rules
+      rules:
+        - alert: NIMEmbeddingHighLatency
+          expr: histogram_quantile(0.95, rate(trtllm_request_latency_ms_bucket[5m])) > 500
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High embedding latency"
+            description: "95th percentile embedding latency > 500ms"
+
+        - alert: NIMEmbeddingFailures
+          expr: rate(trtllm_request_failures_total[5m]) > 0.01
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Embedding request failures"
+            description: "Embedding request failure rate > 1%"
+
+        - alert: NIMEmbeddingGPUMemoryHigh
+          expr: gpu_memory_used_bytes / gpu_memory_total_bytes > 0.9
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High GPU memory usage"
+            description: "GPU memory usage > 90% during embeddings"
+
+        - alert: NIMEmbeddingLowThroughput
+          expr: rate(embedding_requests_total[5m]) < 50
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Low embedding throughput"
+            description: "Embedding requests per second < 50"
+
+        - alert: NIMEmbeddingGPUUtilHigh
+          expr: gpu_utilization > 95
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High GPU utilization"
+            description: "GPU utilization > 95% sustained"

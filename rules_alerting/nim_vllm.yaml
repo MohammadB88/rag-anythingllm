@@ -1,0 +1,82 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nim-vllm-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: nim-vllm.rules
+      rules:
+        - alert: NIMHighP99Latency
+          expr: histogram_quantile(0.99, rate(vllm_request_duration_seconds_bucket[5m])) > 3
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High P99 request latency"
+            description: "99th percentile request latency > 3s"
+
+        - alert: NIMQueueTooLong
+          expr: vllm_num_waiting_requests > 10
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Request queue too long"
+            description: "More than 10 requests waiting in queue"
+
+        - alert: NIMKVCacheHigh
+          expr: gpu_cache_usage_perc > 0.9
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "KV cache usage high"
+            description: "KV cache usage > 90%"
+
+        - alert: NIMGPUMemoryHigh
+          expr: vllm_gpu_memory_used_bytes / vllm_gpu_memory_total_bytes > 0.95
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "GPU memory critical"
+            description: "GPU memory usage > 95%"
+
+        - alert: NIMHighPreemptions
+          expr: rate(vllm_num_preemptions_total[5m]) > 0.1
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High request preemptions"
+            description: "Request preemptions rate too high"
+
+        - alert: NIMHighTTFT
+          expr: histogram_quantile(0.95, rate(vllm_time_to_first_token_seconds_bucket[5m])) > 2
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High time-to-first-token"
+            description: "95th percentile TTFT > 2s"
+
+        - alert: NIMLowThroughput
+          expr: rate(vllm_tokens_per_second_total[5m]) < 10
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Low token throughput"
+            description: "Token throughput below 10 tps"
+
+        - alert: NIMRequestsFailing
+          expr: rate(vllm_request_failure_total[5m]) > 0.01
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Request failures detected"
+            description: "Request failure rate > 1%"
