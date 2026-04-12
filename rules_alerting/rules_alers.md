@@ -9,16 +9,21 @@
 
 ### Prometheus Ruls and Alerts - GPU
 
-| Alert              | Expression                                                                         | For | Severity |
-| ------------------ | ---------------------------------------------------------------------------------- | --- | -------- |
-| DCGMExporterDown   | up{job=~".*dcgm.*"} == 0                                                           | 5m  | critical |
-| GPUDriverNotReady  | kube_pod_container_status_ready{namespace="gpu-operator", pod=~".*driver.*"} == 0  | 10m | critical |
-| GPUToolkitNotReady | kube_pod_container_status_ready{namespace="gpu-operator", pod=~".*toolkit.*"} == 0 | 10m | warning  |
-| GPUMemoryHigh      | DCGM_FI_DEV_FB_USED / (DCGM_FI_DEV_FB_USED + DCGM_FI_DEV_FB_FREE) > 0.85           | 10m | warning  |
-| GPUTemperatureHigh | DCGM_FI_DEV_GPU_TEMP > 80                                                          | 5m  | warning  |
-| GPUUtilizationHigh | DCGM_FI_DEV_GPU_UTIL > 90                                                          | 10m | warning  |
-| GPUPowerNearLimit  | DCGM_FI_DEV_POWER_USAGE / DCGM_FI_DEV_POWER_LIMIT > 0.9                            | 5m  | warning  |
-| GPUUnderutilized   | DCGM_FI_DEV_GPU_UTIL < 30                                                          | 15m | warning  |
+| Alert                   | Expression                                                                         | For         | Severity |
+| ----------------------- | ---------------------------------------------------------------------------------- | ----------- | -------- |
+| DCGMExporterDown        | up{job=~".*dcgm.*\|.*gpu.*"} == 0                                                  | 5m          | critical |
+| GPUDriverNotReady       | kube_pod_container_status_ready{namespace="gpu-operator", pod=~".*driver.*"} == 0  | 10m         | critical |
+| GPUToolkitNotReady      | kube_pod_container_status_ready{namespace="gpu-operator", pod=~".*toolkit.*"} == 0 | 10m         | warning  |
+| GPUNodeNotReady         | kube_node_status_condition{condition="Ready", status="true"} == 0                  | 5m          | critical |
+| GPUErrorsIncreasing     | increase(DCGM_FI_DEV_XID_ERRORS[10m]) > 0                                          | 0m          | critical |
+| GPUMemoryHigh           | DCGM_FI_DEV_FB_USED / (DCGM_FI_DEV_FB_USED + DCGM_FI_DEV_FB_FREE) > 0.85           | 10m         | warning  |
+| GPUTemperatureHigh      | DCGM_FI_DEV_GPU_TEMP > 80                                                          | 5m          | warning  |
+| GPUUtilizationHigh      | DCGM_FI_DEV_GPU_UTIL > 90                                                          | 10m         | warning  |
+| GPUPowerNearLimit       | DCGM_FI_DEV_POWER_USAGE / DCGM_FI_DEV_POWER_LIMIT > 0.9                            | 5m          | warning  |
+| GPUUnderutilized        | DCGM_FI_DEV_GPU_UTIL < 30                                                          | 15m/30m/45m | warning  |
+| GPUMemoryHighComputeLow | (DCGM_FI_DEV_FB_USED / total > 0.80) and (DCGM_FI_DEV_GPU_UTIL < 40)               | 20m         | warning  |
+| GPUImbalanceDetected    | max(DCGM_FI_DEV_GPU_UTIL) - min(DCGM_FI_DEV_GPU_UTIL) > 50                         | 15m         | warning  |
+| GPUPowerInefficient     | (power_usage > 0.85) and (DCGM_FI_DEV_GPU_UTIL < 50)                               | 20m         | warning  |
 
 *****************************************
 *****************************************
