@@ -9,10 +9,13 @@ kind: Kustomization
 # 2. Pull secret (if your cluster requires authentication to pull images from the registry)
 
 resources:
-  # - namespace.yaml
   - deployment.yaml
   - pvc.yaml
   - service.yaml
   - route.yaml
 
+  - servicemonitor.yaml
+
+
+  # - namespace.yaml
   # - secret.yaml

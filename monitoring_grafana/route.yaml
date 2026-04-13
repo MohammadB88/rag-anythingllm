@@ -1,0 +1,18 @@
+# grafana-route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: grafana
+  namespace: grafana
+  labels:
+    app: grafana
+spec:
+  to:
+    kind: Service
+    name: grafana
+    weight: 100
+  port:
+    targetPort: service
+  tls:
+    termination: edge
+  wildcardPolicy: None

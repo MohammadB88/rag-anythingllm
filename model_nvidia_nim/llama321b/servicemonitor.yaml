@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: llama3-2-1b-instruct-monitor
+  namespace: llms   # replace with your app namespace
+  labels:
+    app: llama3-2-1b-instruct
+spec:
+  selector:
+    matchLabels:
+      app: llama3-2-1b-instruct
+  namespaceSelector:
+    matchNames:
+    - llms           # same as metadata.namespace
+  endpoints:
+  - port: http                    # refers to the named port in your Service
+    interval: 30s                 # or adjust as needed
+    path: /metrics                # or your app’s metrics endpoint, e.g. /v1/metrics
+    scheme: http                  # or https if your app exposes TLS
