@@ -1,0 +1,23 @@
+# argocd-apps/myapp.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: llama321b
+  namespace: openshift-gitops  # or your Argo CD namespace
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MohammadB88/rag-anythingllm.git
+    targetRevision: main
+    path: model_nvidia_nim/llama321b      # directory containing kustomization.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: llms             # target namespace for the app
+
+  syncPolicy:
+    automated:
+      prune: true                # remove resources if deleted in Git
+      selfHeal: true             # recreate if someone changes them
+    syncOptions:
+      - CreateNamespace=true   # automatically create the namespace if it doesn't exist
