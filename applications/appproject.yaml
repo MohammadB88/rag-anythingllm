@@ -1,0 +1,17 @@
+# appproject.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: llms
+  namespace: openshift-gitops  # or your Argo CD namespace
+spec:
+  # Allow manifests from a specific repo (modify as needed)
+  sourceRepos:
+  - "https://github.com/MohammadB88/rag-anythingllm.git"
+  # or a wildcard for all repos under this user:
+  # - "https://github.com/MohammadB88/*"
+
+  # Allow apps to deploy into this namespace on the cluster
+  destinations:
+  - namespace: llms
+    server: "https://kubernetes.default.svc"

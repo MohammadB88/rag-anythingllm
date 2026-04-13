@@ -1,3 +1,4 @@
+---
 # argocd-apps/myapp.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -5,7 +6,7 @@ metadata:
   name: llama321b
   namespace: openshift-gitops  # or your Argo CD namespace
 spec:
-  project: default
+  project: llms
   source:
     repoURL: https://github.com/MohammadB88/rag-anythingllm.git
     targetRevision: main
