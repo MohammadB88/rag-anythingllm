@@ -2,7 +2,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-
+# Before installation, make sure that the namespace "llms" exists in your cluster. 
+# You can create it with the following command: "kubectl create namespace llms"
+# Two secrets should also be created:
+# 1. NGC API key secret (for pulling the model from NVIDIA NGC)
+# 2. Pull secret (if your cluster requires authentication to pull images from the registry)
 
 resources:
   # - namespace.yaml
