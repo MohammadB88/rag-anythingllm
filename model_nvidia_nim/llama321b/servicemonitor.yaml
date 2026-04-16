@@ -15,5 +15,5 @@ spec:
   endpoints:
   - port: http                    # refers to the named port in your Service
     interval: 30s                 # or adjust as needed
-    path: /metrics                # or your app’s metrics endpoint, e.g. /v1/metrics
+    path: /v1/metrics                # or your app’s metrics endpoint, e.g. /v1/metrics
     scheme: http                  # or https if your app exposes TLS
