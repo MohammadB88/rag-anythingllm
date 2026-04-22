@@ -32,3 +32,8 @@ oc create secret docker-registry nim-pull-secret --docker-username='$oauthtoken'
 On openshift create a Namespace called *"model-nividia-nim"* and deploy the resoruces from the file in this directory. 
 
 ***Attention:*** Remember to replace the *"API_KEY_GENERATED_FROM_NGC"* with the *"API_KEY"* generated on *"NVIDIA NGC"* website
+
+### TODOs
+- [ ] a script to automate model deployment with nim from the dir
+- [ ] in this script, secret creation for image-pulling and ngc-api will be also automated
+- [ ]

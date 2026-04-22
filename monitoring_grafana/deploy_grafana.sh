@@ -50,6 +50,10 @@ GRAFANA_PASS=$(echo "$GRAFANA_PASS_B64" | base64 -d)
 echo "Grafana admin username: $GRAFANA_USER"
 echo "Grafana admin password: $GRAFANA_PASS"
 
+# Deploy route for Grafana
+echo "Deploy Route for Grafana on Openshift:"
+oc apply -f route.yaml
+
 # Print Grafana URL (if Route exists)
 if oc get route grafana -n "$GRAFANA_NAMESPACE" >/dev/null 2>&1; then
   GRAFANA_HOST=$(oc get route grafana -n "$GRAFANA_NAMESPACE" -o jsonpath='{.spec.host}')
@@ -58,3 +62,5 @@ else
   echo "Grafana Route not found yet. You can expose it with:"
   echo "  oc expose svc/grafana -n $GRAFANA_NAMESPACE"
 fi
+
+
