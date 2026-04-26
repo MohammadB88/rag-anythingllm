@@ -8,7 +8,7 @@ metadata:
 spec:
   project: llms
   source:
-    repoURL: https://github.com/MohammadB88/rag-anythingllm.git
+    repoURL: https://github.com/MohammadB88/genai-application.git
     targetRevision: main
     path: model_nvidia_nim/llama321b      # directory containing kustomization.yaml
 

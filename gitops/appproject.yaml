@@ -7,7 +7,7 @@ metadata:
 spec:
   # Allow manifests from a specific repo (modify as needed)
   sourceRepos:
-  - "https://github.com/MohammadB88/rag-anythingllm.git"
+  - "https://github.com/MohammadB88/genai-application.git"
   # or a wildcard for all repos under this user:
   # - "https://github.com/MohammadB88/*"
 
