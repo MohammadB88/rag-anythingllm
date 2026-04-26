@@ -7,7 +7,7 @@ A comprehensive platform for deploying and managing Generative AI applications o
 This project provides a complete, production-ready infrastructure for deploying Generative AI applications on OpenShift. It includes environment preparation, multiple LLM serving backends, vector databases for embeddings, S3-compatible storage, API gateways for unified access, user-friendly GUIs, comprehensive monitoring stacks, and extensive load/performance testing capabilities.
 
 <div align="center">
-  <img src="docs/images/logo-genai-application-platform.png" alt="GenAI Platform Architecture" width="600">
+  <img src="docs/images/logo-genai-application-platform.png" alt="GenAI Platform Architecture" width="350">
 </div>
 
 ## ✨ Features
