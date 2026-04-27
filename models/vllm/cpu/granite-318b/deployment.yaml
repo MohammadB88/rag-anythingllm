@@ -54,7 +54,7 @@ spec:
             - --max-model-len=4096
             - --port=8000
             # CPU KV-cache budget (matches VLLM_CPU_KVCACHE_SPACE=3 from original)
-            - --cpu-memory-utilization=0.85   # tune if needed; KVCACHE env ignored without launcher
+            # - --cpu-memory-utilization=0.85   # tune if needed; KVCACHE env ignored without launcher
           env:
             - name: VLLM_CPU_KVCACHE_SPACE
               value: "3"
