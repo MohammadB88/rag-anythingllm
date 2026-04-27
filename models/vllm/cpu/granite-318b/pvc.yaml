@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: granite-model-weights
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi   # Granite 3.1 8B bf16 ≈ 16 GiB unpacked; leave headroom

@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: granite-3-1-8b-cpu
+spec:
+  selector:
+    app: granite-3-1-8b-cpu
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
+  type: ClusterIP
