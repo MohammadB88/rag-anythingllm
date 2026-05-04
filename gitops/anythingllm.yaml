@@ -1,0 +1,24 @@
+---
+# argocd-apps/anythingllm.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: anythingllm
+  namespace: openshift-gitops  # or your Argo CD namespace
+spec:
+  project: web-interface
+  source:
+    repoURL: https://github.com/MohammadB88/genai-application.git
+    targetRevision: main
+    path: web_interfaces/anythingllm      # directory containing kustomization.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: web-interface             # target namespace for the app
+
+  syncPolicy:
+    automated:
+      prune: true                # remove resources if deleted in Git
+      selfHeal: true             # recreate if someone changes them
+    syncOptions:
+      - CreateNamespace=true   # automatically create the namespace if it doesn't exist
