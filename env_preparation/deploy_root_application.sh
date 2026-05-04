@@ -56,7 +56,7 @@ replace_storage_class() {
 
   echo -e "${BLUE}Replacing placeholder storageClassName in $file with '$DEFAULT_STORAGE_CLASS'${NC}"
   if grep -qE '^[[:space:]]*storageClassName:[[:space:]]*placeholder-storageclass' "$file"; then
-    sed -i.bak -E "s#^([[:space:]]*storageClassName:[[:space:]]*)placeholder-storageclass#\1$(printf '%s\n' "$DEFAULT_STORAGE_CLASS" | sed -e 's/[\/&]/\\&/g')#" "$file"
+    sed -i.bak -E "s#^([[:space:]]*storageClassName:[[:space:]]*)placeholder-storageclass.*#\1$(printf '%s\n' "$DEFAULT_STORAGE_CLASS" | sed -e 's/[\/&]/\\&/g')#" "$file"
     rm -f "$file.bak"
   else
     echo -e "${YELLOW}No placeholder-storageclass entry found in $file; skipping.${NC}"
