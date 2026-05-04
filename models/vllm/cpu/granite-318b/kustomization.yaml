@@ -13,16 +13,3 @@ resources:
 
   - servicemonitor.yaml
 
-configMapGenerator:
-- name: pvc-storageclass
-  literals:
-  - storageClassName=ocs-external-storagecluster-ceph-rbd
-
-vars:
-- name: STORAGE_CLASS_NAME
-  objref:
-    kind: ConfigMap
-    name: pvc-storageclass
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.storageClassName

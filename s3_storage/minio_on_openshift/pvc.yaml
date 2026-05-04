@@ -1,5 +1,5 @@
 ---
-# STORAGE_CLASS_NAME is defined in kustomization.yaml and applied here.
+# storageClassName is replaced by env_preparation/deploy_root_application.sh during deployment.
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -11,4 +11,4 @@ spec:
     requests:
       storage: 20Gi
   volumeMode: Filesystem
-  storageClassName: $(STORAGE_CLASS_NAME)
+  storageClassName: placeholder-storageclass
