@@ -14,12 +14,12 @@ ROOT_APP_FILE="$SCRIPT_DIR/../gitops/root-application.yaml"
 APP_NAME="genai-root"
 APP_NAMESPACE="openshift-gitops"
 PVC_FILES=(
-  "$SCRIPT_DIR/../models/vllm/cpu/granite-318b/pvc.yaml"
-  "$SCRIPT_DIR/../models/nvidia_nim/llama321b/pvc.yaml"
-  "$SCRIPT_DIR/../models/nvidia_nim/llama3-8b/pvc.yaml"
-  "$SCRIPT_DIR/../models/ollama/pvc.yaml"
-  "$SCRIPT_DIR/../s3_storage/minio_on_openshift/pvc.yaml"
-  "$SCRIPT_DIR/../web_interfaces/anythingllm/pvc.yaml"
+  "../models/vllm/cpu/granite-318b/pvc.yaml"
+  "../models/nvidia_nim/llama321b/pvc.yaml"
+  "../models/nvidia_nim/llama3-8b/pvc.yaml"
+  "../models/ollama/pvc.yaml"
+  "../s3_storage/minio_on_openshift/pvc.yaml"
+  "../web_interfaces/anythingllm/pvc.yaml"
 )
 
 if command -v oc >/dev/null 2>&1; then
