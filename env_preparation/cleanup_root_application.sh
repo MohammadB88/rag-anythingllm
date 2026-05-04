@@ -45,11 +45,41 @@ for manifest in "${APP_MANIFESTS[@]}"; do
 done
 
 echo "**********************"
-echo -e "${BLUE}=== Deleting PersistentVolumeClaims ===${NC}"
+echo -e "${BLUE}=== Cleaning up all resources in namespaces ===${NC}"
 echo "**********************"
 for ns in "${NAMESPACES[@]}"; do
-  echo -e "${YELLOW}Deleting PVCs in namespace: $ns${NC}"
-  $KUBECTL_CMD delete pvc --all -n "$ns" --ignore-not-found
+  if $KUBECTL_CMD get namespace "$ns" >/dev/null 2>&1; then
+    echo -e "${YELLOW}Deleting all resources in namespace: $ns${NC}"
+    
+    # Delete standard resources (pods, deployments, services, etc.)
+    echo -e "${BLUE}  Deleting deployments...${NC}"
+    $KUBECTL_CMD delete deployment --all -n "$ns" --ignore-not-found 2>/dev/null || true
+    
+    echo -e "${BLUE}  Deleting statefulsets...${NC}"
+    $KUBECTL_CMD delete statefulset --all -n "$ns" --ignore-not-found 2>/dev/null || true
+    
+    echo -e "${BLUE}  Deleting daemonsets...${NC}"
+    $KUBECTL_CMD delete daemonset --all -n "$ns" --ignore-not-found 2>/dev/null || true
+    
+    echo -e "${BLUE}  Deleting services...${NC}"
+    $KUBECTL_CMD delete service --all -n "$ns" --ignore-not-found 2>/dev/null || true
+    
+    echo -e "${BLUE}  Deleting routes...${NC}"
+    $KUBECTL_CMD delete route --all -n "$ns" --ignore-not-found 2>/dev/null || true
+    
+    echo -e "${BLUE}  Deleting PersistentVolumeClaims...${NC}"
+    $KUBECTL_CMD delete pvc --all -n "$ns" --ignore-not-found 2>/dev/null || true
+    
+    echo -e "${BLUE}  Deleting ConfigMaps...${NC}"
+    $KUBECTL_CMD delete configmap --all -n "$ns" --ignore-not-found 2>/dev/null || true
+    
+    echo -e "${BLUE}  Deleting Secrets...${NC}"
+    $KUBECTL_CMD delete secret --all -n "$ns" --ignore-not-found 2>/dev/null || true
+    
+    echo -e "${GREEN}✓ All resources cleaned from namespace: $ns${NC}"
+  else
+    echo -e "${YELLOW}Namespace does not exist: $ns (skipping)${NC}"
+  fi
 done
 
 echo "**********************"
@@ -57,7 +87,7 @@ echo -e "${BLUE}=== Deleting namespaces ===${NC}"
 echo "**********************"
 for ns in "${NAMESPACES[@]}"; do
   echo -e "${YELLOW}Deleting namespace: $ns${NC}"
-  $KUBECTL_CMD delete namespace "$ns" --ignore-not-found
+  $KUBECTL_CMD delete namespace "$ns" --ignore-not-found 2>/dev/null || true
 done
 
 echo -e "${GREEN}=== Cleanup complete ===${NC}"
