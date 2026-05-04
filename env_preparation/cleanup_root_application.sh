@@ -18,6 +18,12 @@ APP_MANIFESTS=(
   "$GITOPS_DIR/llm_llama.yaml"
   "$GITOPS_DIR/llm_vllm_granite.yaml"
 )
+NAMESPACES=(
+  "web-interface"
+  "s3-storage"
+  "llms"
+  "llms-vllm"
+)
 
 if command -v oc >/dev/null 2>&1; then
   KUBECTL_CMD="oc"
@@ -36,6 +42,22 @@ for manifest in "${APP_MANIFESTS[@]}"; do
   else
     echo -e "${YELLOW}Skipping missing manifest: $manifest${NC}"
   fi
+done
+
+echo "**********************"
+echo -e "${BLUE}=== Deleting PersistentVolumeClaims ===${NC}"
+echo "**********************"
+for ns in "${NAMESPACES[@]}"; do
+  echo -e "${YELLOW}Deleting PVCs in namespace: $ns${NC}"
+  $KUBECTL_CMD delete pvc --all -n "$ns" --ignore-not-found
+done
+
+echo "**********************"
+echo -e "${BLUE}=== Deleting namespaces ===${NC}"
+echo "**********************"
+for ns in "${NAMESPACES[@]}"; do
+  echo -e "${YELLOW}Deleting namespace: $ns${NC}"
+  $KUBECTL_CMD delete namespace "$ns" --ignore-not-found
 done
 
 echo -e "${GREEN}=== Cleanup complete ===${NC}"

@@ -76,18 +76,49 @@ echo "**********************"
 $KUBECTL_CMD apply -f "$ROOT_APP_FILE"
 
 echo "**********************"
-echo -e "${BLUE}=== Waiting for Application resource to appear ===${NC}"
+echo -e "${BLUE}=== Waiting for Application to be ready (up to 2 minutes) ===${NC}"
 echo "**********************"
-for i in {1..30}; do
-  if $KUBECTL_CMD get application "$APP_NAME" -n "$APP_NAMESPACE" >/dev/null 2>&1; then
-    echo -e "${GREEN}Application '$APP_NAME' exists in namespace '$APP_NAMESPACE'.${NC}"
-    break
-  fi
-  sleep 2
-  if [[ $i -eq 30 ]]; then
-    echo -e "${YELLOW}Warning: Application '$APP_NAME' not found after 60 seconds.${NC}"
-  fi
-done
+
+wait_for_app_ready() {
+  local max_attempts=60
+  local attempt=1
+  
+  while [[ $attempt -le $max_attempts ]]; do
+    # Check if application exists
+    if ! $KUBECTL_CMD get application "$APP_NAME" -n "$APP_NAMESPACE" >/dev/null 2>&1; then
+      echo -e "${YELLOW}[$attempt/$max_attempts] Waiting for Application resource to appear...${NC}"
+      sleep 2
+      ((attempt++))
+      continue
+    fi
+    
+    # Check if application is synced and healthy
+    local sync_status=$($KUBECTL_CMD get application "$APP_NAME" -n "$APP_NAMESPACE" -o jsonpath='{.status.operationState.phase}' 2>/dev/null || echo "Unknown")
+    local health_status=$($KUBECTL_CMD get application "$APP_NAME" -n "$APP_NAMESPACE" -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
+    
+    if [[ "$sync_status" == "Succeeded" ]] && [[ "$health_status" == "Healthy" ]]; then
+      echo -e "${GREEN}✓ Application '$APP_NAME' is READY!${NC}"
+      echo -e "${GREEN}  Sync Status: $sync_status${NC}"
+      echo -e "${GREEN}  Health Status: $health_status${NC}"
+      return 0
+    fi
+    
+    # Still waiting
+    printf -v remaining_time '%d seconds remaining\n' $((($max_attempts - $attempt) * 2))
+    echo -e "${YELLOW}[$attempt/$max_attempts] Sync: $sync_status | Health: $health_status | $remaining_time${NC}"
+    
+    sleep 2
+    ((attempt++))
+  done
+  
+  # Timeout reached
+  echo -e "${RED}✗ Application did not reach ready state within 2 minutes${NC}"
+  echo -e "${YELLOW}Current status:${NC}"
+  $KUBECTL_CMD describe application "$APP_NAME" -n "$APP_NAMESPACE" || true
+  return 1
+}
+
+wait_for_app_ready
 
 echo "**********************"
 if [[ "$KUBECTL_CMD" == "oc" ]]; then
