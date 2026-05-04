@@ -1,17 +1,12 @@
-# kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: llms-vllm
+namespace: llms
 
 resources:
-  - deployment.yaml
-  - pvc.yaml
-  - service.yaml
-
-  # - route.yaml
-
-  - servicemonitor.yaml
+- deployment.yaml
+- pvc.yaml
+- service.yaml
 
 configMapGenerator:
 - name: pvc-storageclass
