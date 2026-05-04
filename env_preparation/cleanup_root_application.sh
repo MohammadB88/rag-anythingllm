@@ -2,6 +2,13 @@
 
 set -euo pipefail
 
+# Color definitions
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 GITOPS_DIR="$SCRIPT_DIR/../gitops"
 APP_MANIFESTS=(
@@ -17,18 +24,18 @@ if command -v oc >/dev/null 2>&1; then
 elif command -v kubectl >/dev/null 2>&1; then
   KUBECTL_CMD="kubectl"
 else
-  echo "Error: neither oc nor kubectl is installed or available in PATH."
+  echo -e "${RED}Error: neither oc nor kubectl is installed or available in PATH.${NC}"
   exit 1
 fi
 
-echo "=== Cleaning up Argo CD root deployment ==="
+echo -e "${BLUE}=== Cleaning up Argo CD root deployment ===${NC}"
 for manifest in "${APP_MANIFESTS[@]}"; do
   if [[ -f "$manifest" ]]; then
-    echo "Deleting application manifest: $manifest"
+    echo -e "${YELLOW}Deleting application manifest: $manifest${NC}"
     $KUBECTL_CMD delete -f "$manifest" --ignore-not-found
   else
-    echo "Skipping missing manifest: $manifest"
+    echo -e "${YELLOW}Skipping missing manifest: $manifest${NC}"
   fi
 done
 
-echo "=== Cleanup complete ==="
+echo -e "${GREEN}=== Cleanup complete ===${NC}"
