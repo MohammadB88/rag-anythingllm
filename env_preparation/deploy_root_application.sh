@@ -6,7 +6,7 @@ set -euo pipefail
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
+BLUE='\033[0;36m'
 NC='\033[0m' # No Color
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -43,6 +43,10 @@ else
   exit 1
 fi
 
+echo "**********************"
+echo -e "${GREEN}Using StorageClass: $DEFAULT_STORAGE_CLASS${NC}"
+echo "**********************"
+
 replace_storage_class() {
   local file="$1"
   if [[ ! -f "$file" ]]; then
@@ -59,15 +63,21 @@ replace_storage_class() {
   fi
 }
 
+echo "**********************"
 echo -e "${BLUE}=== Updating storageClassName in PVC manifests ===${NC}"
+echo "**********************"
 for file in "${PVC_FILES[@]}"; do
   replace_storage_class "$file"
 done
 
+echo "**********************"
 echo -e "${BLUE}=== Deploying root Argo CD application ===${NC}"
+echo "**********************"
 $KUBECTL_CMD apply -f "$ROOT_APP_FILE"
 
+echo "**********************"
 echo -e "${BLUE}=== Waiting for Application resource to appear ===${NC}"
+echo "**********************"
 for i in {1..30}; do
   if $KUBECTL_CMD get application "$APP_NAME" -n "$APP_NAMESPACE" >/dev/null 2>&1; then
     echo -e "${GREEN}Application '$APP_NAME' exists in namespace '$APP_NAMESPACE'.${NC}"
@@ -79,11 +89,15 @@ for i in {1..30}; do
   fi
 done
 
+echo "**********************"
 if [[ "$KUBECTL_CMD" == "oc" ]]; then
   echo -e "${BLUE}=== Listing available OpenShift routes ===${NC}"
+  echo "**********************"
   oc get route --all-namespaces -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name,HOST:.spec.host,TLS:.spec.tls.termination --no-headers | awk '{scheme = ($4 == "" ? "http://" : "https://"); print $1 " " $2 " " scheme $3}'
 else
   echo -e "${YELLOW}Note: route listing is only supported with 'oc' in OpenShift environments.${NC}"
 fi
 
+echo "**********************"
 echo -e "${GREEN}=== Deployment helper finished ===${NC}"
+echo "**********************"
