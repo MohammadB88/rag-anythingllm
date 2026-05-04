@@ -6,7 +6,7 @@ metadata:
   name: granite-3-1-8b-cpu
   namespace: openshift-gitops  # or your Argo CD namespace
 spec:
-  project: llms
+  project: default  # previously llms
   source:
     repoURL: https://github.com/MohammadB88/genai-application.git
     targetRevision: main

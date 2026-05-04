@@ -6,7 +6,7 @@ metadata:
   name: anythingllm
   namespace: openshift-gitops  # or your Argo CD namespace
 spec:
-  project: web-interface
+  project: default  # previously web-interface
   source:
     repoURL: https://github.com/MohammadB88/genai-application.git
     targetRevision: main

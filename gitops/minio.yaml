@@ -6,7 +6,7 @@ metadata:
   name: minio
   namespace: openshift-gitops  # or your Argo CD namespace
 spec:
-  project: s3-storage
+  project: default  # previously s3-storage
   source:
     repoURL: https://github.com/MohammadB88/genai-application.git
     targetRevision: main
