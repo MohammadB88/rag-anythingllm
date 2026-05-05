@@ -82,7 +82,7 @@ wait_for_app_ready() {
   
   while [[ $attempt -le $max_attempts ]]; do
     # Check if application exists
-    if ! $KUBECTL_CMD get application "$APP_NAME" -n "$APP_NAMESPACE" >/dev/null 2>&1; then
+    if ! $KUBECTL_CMD get applications.argoproj.io "$APP_NAME" -n "$APP_NAMESPACE" >/dev/null 2>&1; then
       echo -e "${YELLOW}[$attempt/$max_attempts] Waiting for Application '$APP_NAME' resource to appear...${NC}"
       sleep 2
       ((attempt++))
@@ -90,10 +90,10 @@ wait_for_app_ready() {
     fi
     
     # Check if application is synced and healthy
-    local sync_status=$($KUBECTL_CMD get application "$APP_NAME" -n "$APP_NAMESPACE" -o jsonpath='{.status.operationState.phase}' 2>/dev/null || echo "Unknown")
-    local health_status=$($KUBECTL_CMD get application "$APP_NAME" -n "$APP_NAMESPACE" -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
+    local sync_status=$($KUBECTL_CMD get applications.argoproj.io "$APP_NAME" -n "$APP_NAMESPACE" -o jsonpath='{.status.operationState.phase}' 2>/dev/null || echo "Unknown")
+    local health_status=$($KUBECTL_CMD get applications.argoproj.io "$APP_NAME" -n "$APP_NAMESPACE" -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
     
-    if [[ "$sync_status" == "Succeeded" ]] && [[ "$health_status" == "Healthy" ]]; then
+    if [[ "$sync_status" == "Synced" ]] && [[ "$health_status" == "Healthy" ]]; then
       echo -e "${GREEN}✓ Application '$APP_NAME' is READY!${NC}"
       echo -e "${GREEN}  Sync Status: $sync_status${NC}"
       echo -e "${GREEN}  Health Status: $health_status${NC}"
@@ -111,7 +111,7 @@ wait_for_app_ready() {
   # Timeout reached
   echo -e "${RED}✗ Application did not reach ready state within 2 minutes${NC}"
   echo -e "${YELLOW}Current status:${NC}"
-  $KUBECTL_CMD describe application "$APP_NAME" -n "$APP_NAMESPACE" || true
+  $KUBECTL_CMD describe applications.argoproj.io "$APP_NAME" -n "$APP_NAMESPACE" || true
   return 1
 }
 
