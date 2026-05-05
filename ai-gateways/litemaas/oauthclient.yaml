@@ -4,5 +4,5 @@ metadata:
   name: litemaas
 secret: "PASSWORD"
 redirectURIs:
-  - "https://litemaas-litemaas.CLUSTER_URL/api/auth/callback"
+  - "https://litemaas-litemaas.${CLUSTER_URL}/api/auth/callback"
 grantMethod: prompt

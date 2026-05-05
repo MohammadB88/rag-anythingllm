@@ -97,7 +97,6 @@ fi
 
 echo -e "${GREEN}Detected cluster URL: $CLUSTER_URL${NC}"
 
-
 LITEMAAS_DIR="$SCRIPT_DIR/../ai-gateways/litemaas"
 OAUTHCLIENT_FILE="$LITEMAAS_DIR/oauthclient.yaml"
 USERS_SCRIPT="$LITEMAAS_DIR/users.sh"
@@ -105,8 +104,15 @@ USERS_SCRIPT="$LITEMAAS_DIR/users.sh"
 # Deploy OAuthClient
 if [[ -f "$OAUTHCLIENT_FILE" ]]; then
   echo -e "${BLUE}Deploying OAuthClient from $OAUTHCLIENT_FILE${NC}"
-  $KUBECTL_CMD apply -f "$OAUTHCLIENT_FILE"
-  echo -e "${GREEN}OAuthClient deployed.${NC}"
+  
+  # Create a temporary file with CLUSTER_URL substituted
+  local temp_oauthclient=$(mktemp)
+  sed "s/\${CLUSTER_URL}/$CLUSTER_URL/g" "$OAUTHCLIENT_FILE" > "$temp_oauthclient"
+  
+  $KUBECTL_CMD apply -f "$temp_oauthclient"
+  rm -f "$temp_oauthclient"
+  
+  echo -e "${GREEN}OAuthClient deployed with cluster URL: $CLUSTER_URL${NC}"
 else
   echo -e "${YELLOW}Warning: OAuthClient file not found at $OAUTHCLIENT_FILE${NC}"
 fi
