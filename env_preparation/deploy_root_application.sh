@@ -26,6 +26,7 @@ fi
 echo -e "${BLUE}=== Welcome to the GenAI Application Deployment Helper ===${NC}"
 echo "This script will help you deploy the root Argo CD application for the GenAI demo environment. It will also prompt you to set up necessary secrets for model deployments."
 
+
 echo " "
 echo "**********************"
 echo "**********************"
@@ -74,6 +75,29 @@ echo "**********************"
 echo -e "${BLUE}=== Preparing LiteMaaS installation ===${NC}"
 echo "**********************"
 echo "**********************"
+
+echo -e "${BLUE}=== Detecting cluster URL ===${NC}"
+# Detect cluster URL from kubeconfig
+detect_cluster_url() {
+  local api_server
+  api_server=$($KUBECTL_CMD cluster-info | grep 'Kubernetes master' | awk -F'[:/]' '{print $NF}')
+  
+  if [[ -z "$api_server" ]]; then
+    # Fallback: extract from kubeconfig
+    api_server=$(kubectl config view --raw -o jsonpath='{.clusters[0].cluster.server}' 2>/dev/null | sed 's|https://||' | sed 's|http://||' | cut -d':' -f1)
+  fi
+  
+  echo "$api_server"
+}
+
+CLUSTER_URL="$(detect_cluster_url || echo "")"
+if [[ -z "$CLUSTER_URL" ]]; then
+  echo -e "${RED}Error: Could not detect cluster URL.${NC}"
+  exit 1
+fi
+
+echo -e "${GREEN}Detected cluster URL: $CLUSTER_URL${NC}"
+
 
 LITEMAAS_DIR="$SCRIPT_DIR/../ai-gateways/litemaas"
 OAUTHCLIENT_FILE="$LITEMAAS_DIR/oauthclient.yaml"

@@ -65,7 +65,8 @@ backend:
       # -- Storage size for the backup PVC
       size: 5Gi
       # -- StorageClass name (empty = cluster default)
-      storageClass: "ocs-external-storagecluster-ceph-rbd"
+      storageClass: "ocs-storagecluster-ceph-rbd"
+      # storageClass: "ocs-external-storagecluster-ceph-rbd"
   # -- Set to "0" to disable TLS verification (not recommended for production)
   nodeTlsRejectUnauthorized: "0"
     # On OpenShift, the deploying user is auto-detected as initial admin.
