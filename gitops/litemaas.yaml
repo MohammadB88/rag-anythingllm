@@ -14,14 +14,18 @@ spec:
       path: deployment/helm/litemaas
       helm:
         releaseName: litemaas
-        valueFiles:
-          - $values/ai-gateways/litemaas/values_oc.yaml
+        valueFiles:  
+          # - $values/ai-gateways/litemaas/values_oc.yaml
+          - $values/litemaas-values/values.yaml
     
-    # Source 2: Values file from genai-application repository
+    # Source 2: Values ConfigMap from cluster
     - repoURL: https://github.com/MohammadB88/genai-application.git
-      targetRevision: main
-      path: .
-      ref: values
+      targetRevision: main  
+    # # Source 2: Values file from genai-application repository
+    # - repoURL: https://github.com/MohammadB88/genai-application.git
+    #   targetRevision: main
+    #   path: .
+    #   ref: values
 
   destination:
     server: https://kubernetes.default.svc

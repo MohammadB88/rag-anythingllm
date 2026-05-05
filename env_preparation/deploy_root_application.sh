@@ -100,6 +100,7 @@ echo -e "${GREEN}Detected cluster URL: $CLUSTER_URL${NC}"
 LITEMAAS_DIR="$SCRIPT_DIR/../ai-gateways/litemaas"
 OAUTHCLIENT_FILE="$LITEMAAS_DIR/oauthclient.yaml"
 USERS_SCRIPT="$LITEMAAS_DIR/users.sh"
+VALUES_FILE="$LITEMAAS_DIR/values_oc.yaml"
 
 # Deploy OAuthClient
 if [[ -f "$OAUTHCLIENT_FILE" ]]; then
@@ -115,6 +116,25 @@ if [[ -f "$OAUTHCLIENT_FILE" ]]; then
   echo -e "${GREEN}OAuthClient deployed with cluster URL: $CLUSTER_URL${NC}"
 else
   echo -e "${YELLOW}Warning: OAuthClient file not found at $OAUTHCLIENT_FILE${NC}"
+fi
+
+# Create ConfigMap with substituted values
+if [[ -f "$VALUES_FILE" ]]; then
+  echo -e "${BLUE}Creating ConfigMap with substituted values from $VALUES_FILE${NC}"
+  
+  # Create a temporary file with CLUSTER_URL substituted
+  temp_values=$(mktemp)
+  sed "s/\${CLUSTER_URL}/$CLUSTER_URL/g" "$VALUES_FILE" > "$temp_values"
+  
+  $KUBECTL_CMD create configmap litemaas-values \
+    --from-file=values.yaml="$temp_values" \
+    -n litemaas --dry-run=client -o yaml | $KUBECTL_CMD apply -f -
+  
+  rm -f "$temp_values"
+  
+  echo -e "${GREEN}ConfigMap 'litemaas-values' created in namespace 'litemaas' with substituted cluster URL: $CLUSTER_URL${NC}"
+else
+  echo -e "${YELLOW}Warning: Values file not found at $VALUES_FILE${NC}"
 fi
 
 # Run users.sh script

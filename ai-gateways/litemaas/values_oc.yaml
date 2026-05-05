@@ -33,7 +33,8 @@ postgresql:
     # -- Storage size for the PostgreSQL PVC
     size: 10Gi
     # -- StorageClass name (empty = cluster default)
-    storageClass: "ocs-external-storagecluster-ceph-rbd"
+    storageClass: "ocs-storagecluster-ceph-rbd"
+    # storageClass: "ocs-external-storagecluster-ceph-rbd"
 
 litellm:
   auth:
@@ -42,15 +43,15 @@ litellm:
     uiPassword: "PASSWORD"
 
 backend:
-  litellmApiUrl:  "https://litemaas-litellm-litemaas.CLUSTER_URL"
+  litellmApiUrl:  "https://litemaas-litellm-litemaas.${CLUSTER_URL}"
   auth:
     jwtSecret: "OPENSSL"
     adminApiKeys: "OPENSSL"
     litellmApiKey: "sk-OPENSSL"        # Must match litellm.auth.masterKey
     oauthClientId: "litemaas"
     oauthClientSecret: "123456abcdef"
-    oauthIssuer: "https://oauth-openshift.CLUSTER_URL"
-    oauthCallbackUrl: "https://litemaas-litemaas.CLUSTER_URL/api/auth/callback"
+    oauthIssuer: "https://oauth-openshift.${CLUSTER_URL}"
+    oauthCallbackUrl: "https://litemaas-litemaas.${CLUSTER_URL}/api/auth/callback"
     # -- Backup & Restore configuration
   backup:
     # -- LiteLLM database URL. Auto-constructed when postgresql.enabled is true.
