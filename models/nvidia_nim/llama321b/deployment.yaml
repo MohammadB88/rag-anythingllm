@@ -31,11 +31,13 @@ spec:
           mountPath: /opt/nim/.cache
         resources:
           limits:
-            cpu: "8"
-            memory: 24Gi
+            cpu: "4"
+            memory: 16Gi
             nvidia.com/gpu: "1"
           requests: 
-            cpu: "6"
+            cpu: "2"
+            memory: 4Gi
+            nvidia.com/gpu: "1"
       volumes:
       - name: llama3-2-1b-nim-cache
         persistentVolumeClaim:
