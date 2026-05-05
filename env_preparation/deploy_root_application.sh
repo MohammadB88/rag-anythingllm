@@ -67,7 +67,6 @@ else
   echo "**********************"
 fi
 
-
 echo "**********************"
 echo -e "${BLUE}=== Deploying root Argo CD application ===${NC}"
 echo "**********************"
