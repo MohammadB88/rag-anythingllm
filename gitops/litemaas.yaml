@@ -21,6 +21,8 @@ spec:
     # Source 2: Values ConfigMap from cluster
     - repoURL: https://github.com/MohammadB88/genai-application.git
       targetRevision: main  
+      path: .
+      ref: values
     # # Source 2: Values file from genai-application repository
     # - repoURL: https://github.com/MohammadB88/genai-application.git
     #   targetRevision: main
