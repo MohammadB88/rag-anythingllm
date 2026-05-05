@@ -93,7 +93,7 @@ wait_for_app_ready() {
     local sync_status=$($KUBECTL_CMD get applications.argoproj.io "$APP_NAME" -n "$APP_NAMESPACE" -o jsonpath='{.status.operationState.phase}' 2>/dev/null || echo "Unknown")
     local health_status=$($KUBECTL_CMD get applications.argoproj.io "$APP_NAME" -n "$APP_NAMESPACE" -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
     
-    if [[ "$sync_status" == "Synced" ]] && [[ "$health_status" == "Healthy" ]]; then
+    if [[ "$sync_status" == "Succeeded" ]] && [[ "$health_status" == "Healthy" ]]; then
       echo -e "${GREEN}✓ Application '$APP_NAME' is READY!${NC}"
       echo -e "${GREEN}  Sync Status: $sync_status${NC}"
       echo -e "${GREEN}  Health Status: $health_status${NC}"
