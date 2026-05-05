@@ -26,7 +26,6 @@ fi
 echo -e "${BLUE}=== Welcome to the GenAI Application Deployment Helper ===${NC}"
 echo "This script will help you deploy the root Argo CD application for the GenAI demo environment. It will also prompt you to set up necessary secrets for model deployments."
 
-
 echo " "
 echo "**********************"
 echo "**********************"
