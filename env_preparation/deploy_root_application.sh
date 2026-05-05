@@ -23,11 +23,11 @@ else
   exit 1
 fi
 
-
 echo -e "${BLUE}=== Welcome to the GenAI Application Deployment Helper ===${NC}"
 echo "This script will help you deploy the root Argo CD application for the GenAI demo environment. It will also prompt you to set up necessary secrets for model deployments."
 
-
+echo " "
+echo "**********************"
 echo "**********************"
 echo -e "${BLUE}=== Secret setup option ===${NC}"
 read -r -p "Create secrets in namespace 'llms'? [y/N]: " CREATE_SECRET_ANSWER
@@ -44,6 +44,7 @@ if [[ "$CREATE_SECRET_ANSWER" =~ ^([yY]|[yY][eE][sS])$ ]]; then
 
   echo -e "${GREEN}NGC API key received.${NC}"
   echo "**********************"
+
 
   echo "**********************"
   echo -e "${BLUE}=== Creating secrets in namespace 'llms' ===${NC}"
@@ -67,9 +68,45 @@ else
   echo "**********************"
 fi
 
+echo " "
+echo "**********************"
+echo "**********************"
+echo -e "${BLUE}=== Preparing LiteMaaS installation ===${NC}"
+echo "**********************"
+echo "**********************"
+
+LITEMAAS_DIR="$SCRIPT_DIR/../ai-gateways/litemaas"
+OAUTHCLIENT_FILE="$LITEMAAS_DIR/oauthclient.yaml"
+USERS_SCRIPT="$LITEMAAS_DIR/users.sh"
+
+# Deploy OAuthClient
+if [[ -f "$OAUTHCLIENT_FILE" ]]; then
+  echo -e "${BLUE}Deploying OAuthClient from $OAUTHCLIENT_FILE${NC}"
+  $KUBECTL_CMD apply -f "$OAUTHCLIENT_FILE"
+  echo -e "${GREEN}OAuthClient deployed.${NC}"
+else
+  echo -e "${YELLOW}Warning: OAuthClient file not found at $OAUTHCLIENT_FILE${NC}"
+fi
+
+# Run users.sh script
+if [[ -f "$USERS_SCRIPT" ]]; then
+  echo -e "${BLUE}Running users.sh from $USERS_SCRIPT${NC}"
+  bash "$USERS_SCRIPT"
+  echo -e "${GREEN}Users script executed.${NC}"
+else
+  echo -e "${YELLOW}Warning: users.sh script not found at $USERS_SCRIPT${NC}"
+fi
+
+echo "**********************"
+
+
+echo " "
+echo "**********************"
 echo "**********************"
 echo -e "${BLUE}=== Deploying root Argo CD application ===${NC}"
 echo "**********************"
+echo "**********************"
+
 $KUBECTL_CMD apply -f "$ROOT_APP_FILE"
 
 echo "**********************"

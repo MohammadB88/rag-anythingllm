@@ -1,0 +1,35 @@
+---
+# argocd-apps/litemaas.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: litemaas
+  namespace: openshift-gitops
+spec:
+  project: default
+  sources:
+    # Source 1: Helm chart from litemaas repository
+    - repoURL: https://github.com/rh-aiservices-bu/litemaas.git
+      targetRevision: main
+      path: deployment/helm/litemaas
+      helm:
+        releaseName: litemaas
+        valueFiles:
+          - $values/ai-gateways/litemaas/values_oc.yaml
+    
+    # Source 2: Values file from genai-application repository
+    - repoURL: https://github.com/MohammadB88/genai-application.git
+      targetRevision: main
+      path: .
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: litemaas
+
+  syncPolicy:
+    automated:
+      prune: true                # remove resources if deleted in Git
+      selfHeal: true             # recreate if someone changes them
+    syncOptions:
+      - CreateNamespace=true   # automatically create the namespace if it doesn't exist
