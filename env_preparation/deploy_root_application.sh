@@ -13,14 +13,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_APP_FILE="$SCRIPT_DIR/../gitops/root-application.yaml"
 APP_NAME="genai-root"
 APP_NAMESPACE="openshift-gitops"
-PVC_FILES=(
-  "../models/vllm/cpu/granite-318b/pvc.yaml"
-  "../models/nvidia_nim/llama321b/pvc.yaml"
-  "../models/nvidia_nim/llama3-8b/pvc.yaml"
-  "../models/ollama/pvc.yaml"
-  "../s3_storage/minio_on_openshift/pvc.yaml"
-  "../web_interfaces/anythingllm/pvc.yaml"
-)
+# PVC_FILES=(
+#   "../models/vllm/cpu/granite-318b/pvc.yaml"
+#   "../models/nvidia_nim/llama321b/pvc.yaml"
+#   "../models/nvidia_nim/llama3-8b/pvc.yaml"
+#   "../models/ollama/pvc.yaml"
+#   "../s3_storage/minio_on_openshift/pvc.yaml"
+#   "../web_interfaces/anythingllm/pvc.yaml"
+# )
 
 if command -v oc >/dev/null 2>&1; then
   KUBECTL_CMD="oc"
@@ -31,48 +31,48 @@ else
   exit 1
 fi
 
-detect_default_storage_class() {
-  $KUBECTL_CMD get storageclass -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.annotations.storageclass\.kubernetes\.io/is-default-class} {.metadata.annotations.storageclass\.beta\.kubernetes\.io/is-default-class}{"\n"}{end}' 2>/dev/null | awk '$2 == "true" || $3 == "true" {print $1; exit}'
-}
+# detect_default_storage_class() {
+#   $KUBECTL_CMD get storageclass -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.annotations.storageclass\.kubernetes\.io/is-default-class} {.metadata.annotations.storageclass\.beta\.kubernetes\.io/is-default-class}{"\n"}{end}' 2>/dev/null | awk '$2 == "true" || $3 == "true" {print $1; exit}'
+# }
 
-DEFAULT_STORAGE_CLASS="$(detect_default_storage_class || true)"
-if [[ -n "$DEFAULT_STORAGE_CLASS" ]]; then
-  echo -e "${BLUE}Detected cluster default StorageClass: $DEFAULT_STORAGE_CLASS${NC}"
-else
-  echo -e "${RED}Error: no default StorageClass found.${NC}"
-  exit 1
-fi
+# DEFAULT_STORAGE_CLASS="$(detect_default_storage_class || true)"
+# if [[ -n "$DEFAULT_STORAGE_CLASS" ]]; then
+#   echo -e "${BLUE}Detected cluster default StorageClass: $DEFAULT_STORAGE_CLASS${NC}"
+# else
+#   echo -e "${RED}Error: no default StorageClass found.${NC}"
+#   exit 1
+# fi
 
-echo "**********************"
-echo -e "${GREEN}Using StorageClass: $DEFAULT_STORAGE_CLASS${NC}"
-echo "**********************"
+# echo "**********************"
+# echo -e "${GREEN}Using StorageClass: $DEFAULT_STORAGE_CLASS${NC}"
+# echo "**********************"
 
-replace_storage_class() {
-  local file="$1"
-  if [[ ! -f "$file" ]]; then
-    echo -e "${YELLOW}Skipping missing PVC file: $file${NC}"
-    return
-  fi
+# replace_storage_class() {
+#   local file="$1"
+#   if [[ ! -f "$file" ]]; then
+#     echo -e "${YELLOW}Skipping missing PVC file: $file${NC}"
+#     return
+#   fi
 
-  echo -e "${BLUE}Replacing placeholder storageClassName in $file with '$DEFAULT_STORAGE_CLASS'${NC}"
-  if grep -qE '^[[:space:]]*storageClassName:[[:space:]]*placeholder-storageclass' "$file"; then
-    sed -i.bak -E "s#^([[:space:]]*storageClassName:[[:space:]]*)placeholder-storageclass.*#\1$(printf '%s\n' "$DEFAULT_STORAGE_CLASS" | sed -e 's/[\/&]/\\&/g')#" "$file"
-    rm -f "$file.bak"
-    echo -e "${GREEN}✓ Updated: $file${NC}"
-    echo -e "${BLUE}--- Content of $file ---${NC}"
-    cat "$file"
-    echo -e "${BLUE}--- End of $file ---${NC}"
-  else
-    echo -e "${YELLOW}No placeholder-storageclass entry found in $file; skipping.${NC}"
-  fi
-}
+#   echo -e "${BLUE}Replacing placeholder storageClassName in $file with '$DEFAULT_STORAGE_CLASS'${NC}"
+#   if grep -qE '^[[:space:]]*storageClassName:[[:space:]]*placeholder-storageclass' "$file"; then
+#     sed -i.bak -E "s#^([[:space:]]*storageClassName:[[:space:]]*)placeholder-storageclass.*#\1$(printf '%s\n' "$DEFAULT_STORAGE_CLASS" | sed -e 's/[\/&]/\\&/g')#" "$file"
+#     rm -f "$file.bak"
+#     echo -e "${GREEN}✓ Updated: $file${NC}"
+#     echo -e "${BLUE}--- Content of $file ---${NC}"
+#     cat "$file"
+#     echo -e "${BLUE}--- End of $file ---${NC}"
+#   else
+#     echo -e "${YELLOW}No placeholder-storageclass entry found in $file; skipping.${NC}"
+#   fi
+# }
 
-echo "**********************"
-echo -e "${BLUE}=== Updating storageClassName in PVC manifests ===${NC}"
-echo "**********************"
-for file in "${PVC_FILES[@]}"; do
-  replace_storage_class "$file"
-done
+# echo "**********************"
+# echo -e "${BLUE}=== Updating storageClassName in PVC manifests ===${NC}"
+# echo "**********************"
+# for file in "${PVC_FILES[@]}"; do
+#   replace_storage_class "$file"
+# done
 
 echo "**********************"
 echo -e "${BLUE}=== Deploying root Argo CD application ===${NC}"

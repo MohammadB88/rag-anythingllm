@@ -11,4 +11,5 @@ spec:
     requests:
       storage: 20Gi
   volumeMode: Filesystem
-  storageClassName: placeholder-storageclass
+  storageClassName: ocs-storagecluster-ceph-rbd
+  # storageClassName: placeholder-storageclass
