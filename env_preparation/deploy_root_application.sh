@@ -24,36 +24,48 @@ else
 fi
 
 
+echo -e "${BLUE}=== Welcome to the GenAI Application Deployment Helper ===${NC}"
+echo "This script will help you deploy the root Argo CD application for the GenAI demo environment. It will also prompt you to set up necessary secrets for model deployments."
+
 
 echo "**********************"
-echo -e "${BLUE}=== NGC API key required ===${NC}"
-echo -n "Enter ngc_api_key: "
-read -r -s NGC_API_KEY
-echo
-if [[ -z "${NGC_API_KEY:-}" ]]; then
-  echo -e "${RED}Error: ngc_api_key is required.${NC}"
-  exit 1
+echo -e "${BLUE}=== Secret setup option ===${NC}"
+read -r -p "Create secrets in namespace 'llms'? [y/N]: " CREATE_SECRET_ANSWER
+if [[ "$CREATE_SECRET_ANSWER" =~ ^([yY]|[yY][eE][sS])$ ]]; then
+  echo "**********************"
+  echo -e "${BLUE}=== NGC API key required ===${NC}"
+  echo -n "Enter ngc_api_key: "
+  read -r -s NGC_API_KEY
+  echo
+  if [[ -z "${NGC_API_KEY:-}" ]]; then
+    echo -e "${RED}Error: ngc_api_key is required.${NC}"
+    exit 1
+  fi
+
+  echo -e "${GREEN}NGC API key received.${NC}"
+  echo "**********************"
+
+  echo "**********************"
+  echo -e "${BLUE}=== Creating secrets in namespace 'llms' ===${NC}"
+  echo "**********************"
+  $KUBECTL_CMD create namespace llms --dry-run=client -o yaml | $KUBECTL_CMD apply -f -
+  
+  $KUBECTL_CMD create secret generic ngc-api-key \
+    --from-literal=NGC_API_KEY="$NGC_API_KEY" \
+    -n llms --dry-run=client -o yaml | $KUBECTL_CMD apply -f -
+
+  $KUBECTL_CMD create secret docker-registry nim-pull-secret \
+    --docker-server='nvcr.io' \
+    --docker-username='\$oauthtoken' \
+    --docker-password="$NGC_API_KEY" \
+    -n llms --dry-run=client -o yaml | $KUBECTL_CMD apply -f -
+
+  echo -e "${GREEN}Secrets created in namespace 'llms'.${NC}"
+  echo "**********************"
+else
+  echo -e "${YELLOW}Skipping secret creation for namespace 'llms'.${NC}"
+  echo "**********************"
 fi
-
-echo -e "${GREEN}NGC API key received.${NC}"
-echo "**********************"
-
-echo "**********************"
-echo -e "${BLUE}=== Creating secrets in namespace 'llms' ===${NC}"
-echo "**********************"
-$KUBECTL_CMD create namespace llms --dry-run=client -o yaml | $KUBECTL_CMD apply -f -
-$KUBECTL_CMD create secret generic ngc-api-key \
-  --from-literal=NGC_API_KEY="$NGC_API_KEY" \
-  -n llms --dry-run=client -o yaml | $KUBECTL_CMD apply -f -
-
-$KUBECTL_CMD create secret docker-registry nim-pull-secret \
-  --docker-server='nvcr.io' \
-  --docker-username='\$oauthtoken' \
-  --docker-password="$NGC_API_KEY" \
-  -n llms --dry-run=client -o yaml | $KUBECTL_CMD apply -f -
-
-echo -e "${GREEN}Secrets created in namespace 'llms'.${NC}"
-echo "**********************"
 
 
 echo "**********************"
