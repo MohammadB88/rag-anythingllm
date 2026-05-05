@@ -106,7 +106,7 @@ if [[ -f "$OAUTHCLIENT_FILE" ]]; then
   echo -e "${BLUE}Deploying OAuthClient from $OAUTHCLIENT_FILE${NC}"
   
   # Create a temporary file with CLUSTER_URL substituted
-  local temp_oauthclient=$(mktemp)
+  temp_oauthclient=$(mktemp)
   sed "s/\${CLUSTER_URL}/$CLUSTER_URL/g" "$OAUTHCLIENT_FILE" > "$temp_oauthclient"
   
   $KUBECTL_CMD apply -f "$temp_oauthclient"
